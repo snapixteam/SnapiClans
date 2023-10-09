@@ -1,1 +1,1 @@
-rootProject.name = "PLUGIN_NAME"
+rootProject.name = "SnapiClans"

@@ -1,8 +1,8 @@
-package ru.mcsnapix.plugin_name.settings
+package ru.mcsnapix.snapiclans.settings
 
 import org.bukkit.plugin.Plugin
 import org.slf4j.Logger
-import ru.mcsnapix.plugin_name.PLUGIN_NAME
+import ru.mcsnapix.snapiclans.SnapiClans
 import space.arim.dazzleconf.ConfigurationFactory
 import space.arim.dazzleconf.ConfigurationOptions
 import space.arim.dazzleconf.error.ConfigFormatSyntaxException
@@ -59,7 +59,7 @@ class Configuration<C> private constructor(private val logger: Logger, configHel
             configClass: Class<C>?,
             options: ConfigurationOptions?
         ): Configuration<C> {
-            val plugin = PLUGIN_NAME.instance
+            val plugin = SnapiClans
             return create(plugin.slF4JLogger, plugin.dataFolder.toPath(), fileName, configClass, options)
         }
 

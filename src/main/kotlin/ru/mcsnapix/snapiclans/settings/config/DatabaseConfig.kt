@@ -1,8 +1,8 @@
-package ru.mcsnapix.plugin_name.settings.config
+package ru.mcsnapix.snapiclans.settings.config
 
 import space.arim.dazzleconf.annote.ConfDefault.DefaultString
 
-interface MySQLConfig {
+interface DatabaseConfig {
     @DefaultString("localhost:3306")
     fun host(): String
 

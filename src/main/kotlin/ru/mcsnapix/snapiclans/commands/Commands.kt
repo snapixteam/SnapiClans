@@ -21,5 +21,6 @@ object Commands : Part() {
         val replacements = manager.commandReplacements
         val alias = settings.config.alias()
         replacements.addReplacement("clanscommand", alias.mainCommand())
+        replacements.addReplacement("clanscommandcreate", alias.createCommand())
     }
 }

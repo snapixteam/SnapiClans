@@ -1,3 +1,3 @@
 package ru.mcsnapix.snapiclans.api.exceptions
 
-class PlayerAlreadyInClanException: Exception("Игрок уже в клане")
+class PlayerAlreadyInClanException : RuntimeException("Player already in clan")

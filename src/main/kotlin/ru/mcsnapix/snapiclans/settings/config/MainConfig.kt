@@ -28,29 +28,34 @@ interface MainConfig {
         @DefaultObject("defaultRoleDefault")
         fun defaultRole(): ClanRole
 
-        @Suppress("unused")
-        fun defaultRoleDefault() = ClanRole("default", "Участник", 1, emptySet())
-
         @ConfKey("owner-role")
         @DefaultObject("ownerRoleDefault")
         fun ownerRole(): ClanRole
-
-        @Suppress("unused")
-        fun ownerRoleDefault() = ClanRole("owner", "Владелец", 10, ClanPermission.values().toSet())
 
         @ConfKey("other-roles")
         @DefaultObject("otherRolesDefault")
         fun otherRoles(): List<ClanRole>
 
-        @Suppress("unused")
-        fun otherRolesDefault() = listOf(
-            ClanRole("veteran", "Ветеран", 2, setOf(ClanPermission.INVITE, ClanPermission.KICK)),
-            ClanRole(
-                "vice",
-                "Заместитель",
-                5,
-                setOf(ClanPermission.INVITE, ClanPermission.KICK, ClanPermission.SET_ROLE)
+        companion object {
+            @JvmStatic
+            @Suppress("unused")
+            fun defaultRoleDefault() = ClanRole("default", "Участник", 1, emptySet())
+
+            @JvmStatic
+            @Suppress("unused")
+            fun ownerRoleDefault() = ClanRole("owner", "Владелец", 10, ClanPermission.values().toSet())
+
+            @JvmStatic
+            @Suppress("unused")
+            fun otherRolesDefault() = listOf(
+                ClanRole("veteran", "Ветеран", 2, setOf(ClanPermission.INVITE, ClanPermission.KICK)),
+                ClanRole(
+                    "vice",
+                    "Заместитель",
+                    5,
+                    setOf(ClanPermission.INVITE, ClanPermission.KICK, ClanPermission.SET_ROLE)
+                )
             )
-        )
+        }
     }
 }

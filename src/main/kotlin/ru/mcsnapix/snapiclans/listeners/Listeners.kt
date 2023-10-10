@@ -6,6 +6,6 @@ import ru.mcsnapix.snapiclans.extensions.location
 object Listeners : Part() {
     override fun enable() {
 
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 }

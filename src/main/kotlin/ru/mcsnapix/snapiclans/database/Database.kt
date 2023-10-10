@@ -30,8 +30,9 @@ internal object Database : Part() {
     }
 
     private fun initialize() {
-        DB.executeUpdateAsync(CREATE_TABLE_CLANS)
-        DB.executeUpdateAsync(CREATE_TABLE_MEMBERS)
+        DB.executeUpdateAsync(CREATE_TABLE_CLANS).thenApply {
+            DB.executeUpdate(CREATE_TABLE_MEMBERS)
+        }
     }
 
     fun clans(): List<Clan> = DB.getResults(SELECT_CLANS).map { Clan(it) }
@@ -52,12 +53,16 @@ internal object Database : Part() {
 
     fun users(): List<ClanUser> = DB.getResults(SELECT_USERS).map { ClanUser(it) }
 
-    fun users(clanId: Int): List<ClanUser> = DB.getResults(SELECT_USERS_WITH_ID, clanId).map { ClanUser(it) }
+    fun users(clanId: Int): List<ClanUser> {
+        println(DB.getResults(SELECT_USERS_WITH_ID, clanId))
+        val result = DB.getResults(SELECT_USERS_WITH_ID, clanId) ?: return emptyList()
+        return result.map { ClanUser(it) }
+    }
 
     fun user(username: String): ClanUser = ClanUser(DB.getFirstRow(SELECT_USER_WITH_NAME, username))
 
-    fun createUser(username: String, displayName: String, owner: String) {
-        DB.executeInsert(INSERT_USER, username, displayName, owner)
+    fun createUser(clanId: Int, username: String, role: String) {
+        DB.executeInsert(INSERT_USER, clanId, username, role)
     }
 
     fun removeUser(username: String) {

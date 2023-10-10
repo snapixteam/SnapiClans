@@ -8,9 +8,9 @@ import space.arim.dazzleconf.ConfigurationOptions
 
 object Settings : Part() {
     private lateinit var databaseConfig: Configuration<DatabaseConfig>
-    val database = databaseConfig.data()
     private lateinit var mainConfig: Configuration<MainConfig>
-    val config = mainConfig.data()
+    val database get() = databaseConfig.data()
+    val config get() = mainConfig.data()
 
     override fun enable() {
         val options = ConfigurationOptions.Builder()

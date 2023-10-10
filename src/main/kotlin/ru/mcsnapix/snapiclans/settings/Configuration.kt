@@ -59,7 +59,7 @@ class Configuration<C> private constructor(private val logger: Logger, configHel
             configClass: Class<C>?,
             options: ConfigurationOptions?
         ): Configuration<C> {
-            val plugin = SnapiClans
+            val plugin = SnapiClans.instance
             return create(plugin.slF4JLogger, plugin.dataFolder.toPath(), fileName, configClass, options)
         }
 

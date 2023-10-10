@@ -7,8 +7,16 @@ import ru.mcsnapix.snapiclans.listeners.Listeners
 import ru.mcsnapix.snapiclans.registry.Registry
 import ru.mcsnapix.snapiclans.settings.Settings
 
-object SnapiClans : JavaPlugin() {
+class SnapiClans : JavaPlugin() {
+    companion object {
+        @JvmStatic
+        lateinit var instance: SnapiClans
+            private set
+    }
+
     override fun onEnable() {
+        instance = this
+
         Settings.enable()
         Database.enable()
         Listeners.enable()

@@ -13,6 +13,7 @@ import ru.mcsnapix.snapiclans.settings.Settings
 class SnapiClans : JavaPlugin() {
     private var adventure: BukkitAudiences? = null
     lateinit var economy: Economy
+
     companion object {
         @JvmStatic
         lateinit var instance: SnapiClans

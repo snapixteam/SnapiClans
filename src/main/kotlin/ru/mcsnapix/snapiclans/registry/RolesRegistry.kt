@@ -6,16 +6,21 @@ import ru.mcsnapix.snapiclans.settings.Settings
 
 internal object RolesRegistry : Part() {
     val clanRoles = mutableMapOf<String, ClanRole>()
+    lateinit var owner: ClanRole
+    lateinit var default: ClanRole
+    lateinit var other: List<ClanRole>
+
 
     override fun enable() {
         val rolesConfig = Settings.config.roles()
 
-        val list = mutableListOf(rolesConfig.ownerRole(), rolesConfig.defaultRole())
-        list.addAll(rolesConfig.otherRoles())
+        owner = rolesConfig.ownerRole()
+        default = rolesConfig.defaultRole()
+        other = rolesConfig.otherRoles()
 
-        for (role in list) {
-            clanRoles[role.name] = role
-        }
+        clanRoles[owner.name] = owner
+        clanRoles[default.name] = default
+        other.forEach { r -> clanRoles[r.name] = r }
     }
 
     override fun reload() {

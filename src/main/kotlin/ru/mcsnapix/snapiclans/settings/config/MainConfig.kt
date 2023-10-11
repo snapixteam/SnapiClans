@@ -2,9 +2,7 @@ package ru.mcsnapix.snapiclans.settings.config
 
 import ru.mcsnapix.snapiclans.api.clans.ClanPermission
 import ru.mcsnapix.snapiclans.api.clans.role.ClanRole
-import space.arim.dazzleconf.annote.ConfDefault.DefaultInteger
-import space.arim.dazzleconf.annote.ConfDefault.DefaultObject
-import space.arim.dazzleconf.annote.ConfDefault.DefaultString
+import space.arim.dazzleconf.annote.ConfDefault.*
 import space.arim.dazzleconf.annote.ConfKey
 import space.arim.dazzleconf.annote.SubSection
 
@@ -24,6 +22,10 @@ interface MainConfig {
         @ConfKey("remove-command")
         @DefaultString("remove|delete|rem|del")
         fun removeCommand(): String
+
+        @ConfKey("invite-command")
+        @DefaultString("invite")
+        fun inviteCommand(): String
     }
 
     @SubSection

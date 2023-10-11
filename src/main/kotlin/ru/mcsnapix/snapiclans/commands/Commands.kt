@@ -1,8 +1,6 @@
 package ru.mcsnapix.snapiclans.commands
 
-import co.aikar.commands.BukkitCommandCompletionContext
 import co.aikar.commands.PaperCommandManager
-import com.google.common.collect.ImmutableList
 import ru.mcsnapix.snapiclans.Part
 import ru.mcsnapix.snapiclans.SnapiClans
 import ru.mcsnapix.snapiclans.settings.Settings
@@ -26,5 +24,6 @@ object Commands : Part() {
         replacements.addReplacement("clanscommand", alias.mainCommand())
         replacements.addReplacement("clanscommandcreate", alias.createCommand())
         replacements.addReplacement("clanscommandremove", alias.removeCommand())
+        replacements.addReplacement("clanscommandinvite", alias.inviteCommand())
     }
 }

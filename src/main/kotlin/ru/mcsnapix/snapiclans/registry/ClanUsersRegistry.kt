@@ -1,6 +1,5 @@
 package ru.mcsnapix.snapiclans.registry
 
-import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.api.clans.ClanUser
 import ru.mcsnapix.snapiclans.database.Database
 

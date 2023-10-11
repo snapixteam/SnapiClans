@@ -1,7 +1,6 @@
 package ru.mcsnapix.snapiclans.extensions
 
 import org.bukkit.entity.Player
-import ru.mcsnapix.snapiclans.database.Database
 
 fun parsePlayer(string: String, player: Player): String {
     var result = string

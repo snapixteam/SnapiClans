@@ -47,12 +47,36 @@ interface MessageConfig {
             @DefaultString("&cВы не в клане")
             fun noClan(): String
 
+            @ConfKey("no-permission")
+            @DefaultString("&cУ вас нет разрешения, чтобы сделать это")
+            fun noPermission(): String
+
             @ConfKey("accept")
             @DefaultString("&aНажмите, чтобы потвердить удаление")
             fun accept(): String
 
             @ConfKey("success")
             @DefaultString("&aВы успешно удалили клан")
+            fun success(): String
+        }
+
+        @SubSection
+        fun invite(): InviteCommand
+        interface InviteCommand {
+            @ConfKey("no-clan")
+            @DefaultString("&cВы не в клане")
+            fun noClan(): String
+
+            @ConfKey("no-permission")
+            @DefaultString("&cУ вас нет разрешения, чтобы отправлять приглашение")
+            fun noPermission(): String
+
+            @ConfKey("accept-or-decline")
+            @DefaultString("&aНажмите, чтобы потвердить удаление (clans accept player, clans decline player)")
+            fun acceptOrDecline(): String
+
+            @ConfKey("success")
+            @DefaultString("&aВы отправили приглашение")
             fun success(): String
         }
     }

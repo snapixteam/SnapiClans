@@ -8,7 +8,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import ru.mcsnapix.snapiclans.SnapiClans
 import ru.mcsnapix.snapiclans.api.SnapiClansApi
-import ru.mcsnapix.snapiclans.extensions.economy
+import ru.mcsnapix.snapiclans.api.clans.ClanPermission
+import ru.mcsnapix.snapiclans.extensions.clanUser
 import ru.mcsnapix.snapiclans.extensions.hasMoney
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.extensions.withdrawMoney
@@ -68,7 +69,7 @@ class ClansCommand : BaseCommand() {
             return
         }
 
-        val price = config.economy().createClan();
+        val price = config.economy().createClan()
 
         if (!player.hasMoney(price)) {
             player.send(create.noMoney())
@@ -80,12 +81,38 @@ class ClansCommand : BaseCommand() {
 
         with(SnapiClansApi) {
             createClan(name, displayName, owner)
-            clan(name)?.let { createUser(player.name, it, RolesRegistry.clanRoles["owner"]!!) }
+            clan(name)?.let { createUser(player.name, it, RolesRegistry.owner) }
         }
     }
 
     @Subcommand("%clanscommandremove")
-    fun remove(player: Player) {
+    fun remove(player: Player, args: Array<String>) {
         val remove = message.commands().remove()
+        val clanUser = player.clanUser
+
+        if (clanUser == null) {
+            player.send(remove.noClan())
+            return
+        }
+
+        if (!clanUser.role.permissions.contains(ClanPermission.DISBAND)) {
+            player.send(remove.noPermission())
+            return
+        }
+
+        if (args.size == 1) {
+            if (args[0].lowercase() == "accept") {
+                SnapiClansApi.removeClan(clanUser.clan.name)
+                player.send(remove.success())
+                return
+            }
+        }
+
+        player.send(remove.accept())
+    }
+
+    @Subcommand("%clanscommandinvite")
+    fun invite(player: Player, args: Array<String>) {
+
     }
 }

@@ -5,7 +5,7 @@ import org.bukkit.event.HandlerList
 import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.api.clans.ClanUser
 
-class AddUserEvent(
+class JoinUserEvent(
     val clanUser: ClanUser,
     val clan: Clan
 ) : Event() {

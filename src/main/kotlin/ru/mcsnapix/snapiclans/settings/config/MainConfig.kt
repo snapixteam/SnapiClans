@@ -26,6 +26,26 @@ interface MainConfig {
         @ConfKey("invite-command")
         @DefaultString("invite")
         fun inviteCommand(): String
+
+        @ConfKey("accept-command")
+        @DefaultString("accept")
+        fun acceptCommand(): String
+
+        @ConfKey("decline-command")
+        @DefaultString("decline")
+        fun declineCommand(): String
+
+        @ConfKey("role-command")
+        @DefaultString("role")
+        fun roleCommand(): String
+
+        @ConfKey("leave-command")
+        @DefaultString("leave")
+        fun leaveCommand(): String
+
+        @ConfKey("chat-command")
+        @DefaultString("chat")
+        fun chatCommand(): String
     }
 
     @SubSection

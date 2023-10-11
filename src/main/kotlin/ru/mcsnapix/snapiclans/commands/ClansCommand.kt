@@ -115,4 +115,29 @@ class ClansCommand : BaseCommand() {
     fun invite(player: Player, args: Array<String>) {
 
     }
+
+    @Subcommand("%clanscommandaccept")
+    fun accept(player: Player, args: Array<String>) {
+
+    }
+
+    @Subcommand("%clanscommanddecline")
+    fun decline(player: Player, args: Array<String>) {
+
+    }
+
+    @Subcommand("%clanscommandrole")
+    fun role(player: Player, args: Array<String>) {
+
+    }
+
+    @Subcommand("%clanscommandleave")
+    fun leave(player: Player, args: Array<String>) {
+
+    }
+
+    @Subcommand("%clanscommandchat")
+    fun chat(player: Player, args: Array<String>) {
+
+    }
 }

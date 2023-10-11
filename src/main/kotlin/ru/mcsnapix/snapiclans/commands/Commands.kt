@@ -25,5 +25,10 @@ object Commands : Part() {
         replacements.addReplacement("clanscommandcreate", alias.createCommand())
         replacements.addReplacement("clanscommandremove", alias.removeCommand())
         replacements.addReplacement("clanscommandinvite", alias.inviteCommand())
+        replacements.addReplacement("clanscommandaccept", alias.acceptCommand())
+        replacements.addReplacement("clanscommanddecline", alias.declineCommand())
+        replacements.addReplacement("clanscommandrole", alias.roleCommand())
+        replacements.addReplacement("clanscommandleave", alias.leaveCommand())
+        replacements.addReplacement("clanscommandchat", alias.chatCommand())
     }
 }

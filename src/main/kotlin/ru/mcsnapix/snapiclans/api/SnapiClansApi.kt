@@ -7,17 +7,21 @@ import ru.mcsnapix.snapiclans.api.events.clan.CreateClanEvent
 import ru.mcsnapix.snapiclans.api.events.user.JoinUserEvent
 import ru.mcsnapix.snapiclans.database.Database
 import ru.mcsnapix.snapiclans.extensions.callEvent
+import ru.mcsnapix.snapiclans.messenger.SQLMessenger
+import ru.mcsnapix.snapiclans.messenger.message.ClanUpdateMessage
 import ru.mcsnapix.snapiclans.registry.ClanUsersRegistry
 import ru.mcsnapix.snapiclans.registry.ClansRegistry
+import java.util.*
 
 object SnapiClansApi {
-    fun clan(name: String): Clan? = ClansRegistry.get(name)
-    fun clan(id: Int): Clan? = ClansRegistry.name(id)
+    fun clan(name: String): Clan? = ClansRegistry[name]
+    fun clan(id: Int): Clan? = ClansRegistry[id]
 
     fun createClan(name: String, displayName: String, owner: String) {
         Database.createClan(name, displayName, owner)
         ClansRegistry.add(name)
-        ClansRegistry.get(name)?.let { callEvent(CreateClanEvent(it)) }
+        SQLMessenger.sendOutgoingMessage(ClanUpdateMessage(UUID.randomUUID(), name))
+        ClansRegistry[name]?.let { callEvent(CreateClanEvent(it)) }
     }
 
     fun updateClan(name: String) {
@@ -29,12 +33,13 @@ object SnapiClansApi {
     }
 
     fun removeClan(name: String) {
-        ClansRegistry.get(name)?.let {
+        ClansRegistry[name]?.let {
             it.members.forEach { user ->
                 removeUser(user)
             }
             ClansRegistry.remove(name)
             Database.removeClan(it.id)
+            SQLMessenger.sendOutgoingMessage(ClanUpdateMessage(UUID.randomUUID(), name))
         }
     }
 

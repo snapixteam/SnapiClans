@@ -2,11 +2,14 @@ package ru.mcsnapix.snapiclans.registry
 
 import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.database.Database
+import ru.mcsnapix.snapiclans.messenger.SQLMessenger
+import ru.mcsnapix.snapiclans.messenger.message.ClanUpdateMessage
+import java.util.*
 
 internal object ClansRegistry {
     private val clans = mutableMapOf<String, Clan>()
 
-    fun get(name: String): Clan? {
+    operator fun get(name: String): Clan? {
         if (!clans.containsKey(name)) {
             if (!add(name)) {
                 return null
@@ -16,7 +19,7 @@ internal object ClansRegistry {
         return clans[name]
     }
 
-    fun name(id: Int): Clan? {
+    operator fun get(id: Int): Clan? {
         for (entry in clans.entries) {
             if (entry.value.id == id) {
                 return entry.value
@@ -24,6 +27,7 @@ internal object ClansRegistry {
         }
         Database.clan(id)?.let {
             add(it)
+            SQLMessenger.sendOutgoingMessage(ClanUpdateMessage(UUID.randomUUID(), it.name))
             return it
         }
         return null

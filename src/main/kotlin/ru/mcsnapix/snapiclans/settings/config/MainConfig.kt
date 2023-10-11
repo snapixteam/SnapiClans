@@ -2,6 +2,7 @@ package ru.mcsnapix.snapiclans.settings.config
 
 import ru.mcsnapix.snapiclans.api.clans.ClanPermission
 import ru.mcsnapix.snapiclans.api.clans.role.ClanRole
+import space.arim.dazzleconf.annote.ConfDefault.DefaultInteger
 import space.arim.dazzleconf.annote.ConfDefault.DefaultObject
 import space.arim.dazzleconf.annote.ConfDefault.DefaultString
 import space.arim.dazzleconf.annote.ConfKey
@@ -19,6 +20,10 @@ interface MainConfig {
         @ConfKey("create-command")
         @DefaultString("create")
         fun createCommand(): String
+
+        @ConfKey("remove-command")
+        @DefaultString("remove|delete|rem|del")
+        fun removeCommand(): String
     }
 
     @SubSection
@@ -57,5 +62,25 @@ interface MainConfig {
                 )
             )
         }
+    }
+
+    @SubSection
+    fun regex(): Regex
+    interface Regex {
+        @ConfKey("clan-name")
+        @DefaultString("[A-z0-9]{3,16}")
+        fun clanName(): String
+
+        @ConfKey("clan-display-name")
+        @DefaultString("[A-zА-я0-9]{3,16})")
+        fun clanDisplayName(): String
+    }
+
+    @SubSection
+    fun economy(): Economy
+    interface Economy {
+        @ConfKey("create-clan")
+        @DefaultInteger(1000)
+        fun createClan(): Int
     }
 }

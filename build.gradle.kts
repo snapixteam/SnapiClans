@@ -13,6 +13,7 @@ repositories {
         name = "papermc-repo"
     }
     maven("https://repo.aikar.co/content/groups/aikar/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -20,9 +21,12 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.26")
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 
     implementation("co.aikar:idb-core:1.0.0-SNAPSHOT")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("net.kyori:adventure-text-minimessage:4.14.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.1")
     implementation("space.arim.dazzleconf:dazzleconf-ext-snakeyaml:1.2.1")
 }
 
@@ -73,4 +77,5 @@ tasks {
 bukkit {
     main = "${project.group}.${project.name}"
     authors = listOf("SnapiX")
+    depend = listOf("Vault")
 }

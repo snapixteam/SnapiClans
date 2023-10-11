@@ -35,11 +35,20 @@ internal object Database : Part() {
         }
     }
 
-    fun clans(): List<Clan> = DB.getResults(SELECT_CLANS).map { Clan(it) }
+    fun clans(): List<Clan> {
+        val result = DB.getResults(SELECT_CLANS) ?: return emptyList()
+        return result.map { Clan(it) }
+    }
 
-    fun clan(id: Int): Clan = Clan(DB.getFirstRow(SELECT_CLAN_WITH_ID, id))
+    fun clan(id: Int): Clan? {
+        val result = DB.getFirstRow(SELECT_CLAN_WITH_ID, id) ?: return null
+        return Clan(result)
+    }
 
-    fun clan(name: String): Clan = Clan(DB.getFirstRow(SELECT_CLAN_WITH_NAME, name))
+    fun clan(name: String): Clan? {
+        val result = DB.getFirstRow(SELECT_CLAN_WITH_NAME, name) ?: return null
+        return Clan(result)
+    }
 
     fun createClan(name: String, displayName: String, owner: String) {
         DB.executeInsert(INSERT_CLAN, name, displayName, owner)
@@ -49,17 +58,25 @@ internal object Database : Part() {
         DB.executeUpdate(REMOVE_CLAN, id)
     }
 
-    fun userClan(username: String): ClanUser = ClanUser(DB.getFirstRow(SELECT_USER_CLAN, username))
+    fun userClan(username: String): Clan? {
+        val result = DB.getFirstRow(SELECT_USER_CLAN, username) ?: return null
+        return Clan(result)
+    }
 
-    fun users(): List<ClanUser> = DB.getResults(SELECT_USERS).map { ClanUser(it) }
+    fun users(): List<ClanUser> {
+        val result = DB.getResults(SELECT_USERS) ?: return emptyList()
+        return result.map { ClanUser(it) }
+    }
 
     fun users(clanId: Int): List<ClanUser> {
-        println(DB.getResults(SELECT_USERS_WITH_ID, clanId))
         val result = DB.getResults(SELECT_USERS_WITH_ID, clanId) ?: return emptyList()
         return result.map { ClanUser(it) }
     }
 
-    fun user(username: String): ClanUser = ClanUser(DB.getFirstRow(SELECT_USER_WITH_NAME, username))
+    fun user(username: String): ClanUser? {
+        val result = DB.getFirstRow(SELECT_USER_WITH_NAME, username) ?: return null
+        return ClanUser(result)
+    }
 
     fun createUser(clanId: Int, username: String, role: String) {
         DB.executeInsert(INSERT_USER, clanId, username, role)

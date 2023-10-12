@@ -6,7 +6,7 @@ import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.api.clans.ClanUser
 
 class AcceptUserEvent(
-    val clanUser: ClanUser,
+    val clanUser: ClanUser?,
     val clan: Clan
 ) : Event() {
     companion object {

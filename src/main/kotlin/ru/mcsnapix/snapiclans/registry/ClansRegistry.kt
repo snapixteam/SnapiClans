@@ -2,9 +2,6 @@ package ru.mcsnapix.snapiclans.registry
 
 import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.database.Database
-import ru.mcsnapix.snapiclans.messenger.SQLMessenger
-import ru.mcsnapix.snapiclans.messenger.message.ClanUpdateMessage
-import java.util.*
 
 internal object ClansRegistry {
     private val clans = mutableMapOf<String, Clan>()
@@ -27,7 +24,6 @@ internal object ClansRegistry {
         }
         Database.clan(id)?.let {
             add(it)
-            SQLMessenger.sendOutgoingMessage(ClanUpdateMessage(UUID.randomUUID(), it.name))
             return it
         }
         return null
@@ -38,6 +34,8 @@ internal object ClansRegistry {
         clans[name] = result
         return true
     }
+
+    fun list() = clans
 
     fun add(clan: Clan): Boolean {
         clans[clan.name] = clan
@@ -59,6 +57,6 @@ internal object ClansRegistry {
     }
 
     fun remove(clan: Clan) {
-        clans.remove(clan.name)
+        remove(clan.name)
     }
 }

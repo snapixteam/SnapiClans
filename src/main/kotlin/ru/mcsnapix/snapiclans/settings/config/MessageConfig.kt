@@ -1,6 +1,7 @@
 package ru.mcsnapix.snapiclans.settings.config
 
 import space.arim.dazzleconf.annote.ConfDefault.DefaultString
+import space.arim.dazzleconf.annote.ConfDefault.DefaultStrings
 import space.arim.dazzleconf.annote.ConfKey
 import space.arim.dazzleconf.annote.SubSection
 
@@ -8,6 +9,9 @@ interface MessageConfig {
     @SubSection
     fun commands(): Commands
     interface Commands {
+        @DefaultStrings("Hello", "world??", "!")
+        fun help(): List<String>
+
         @SubSection
         fun create(): CreateCommand
         interface CreateCommand {
@@ -78,6 +82,18 @@ interface MessageConfig {
             @ConfKey("success")
             @DefaultString("&aВы отправили приглашение")
             fun success(): String
+        }
+
+        @SubSection
+        fun chat(): ChatCommand
+        interface ChatCommand {
+            @ConfKey("no-clan")
+            @DefaultString("&cВы не в клане")
+            fun noClan(): String
+
+            @ConfKey("write-message")
+            @DefaultString("&aНапишите сообщение")
+            fun writeMessage(): String
         }
     }
 }

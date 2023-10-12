@@ -1,9 +1,8 @@
 package ru.mcsnapix.snapiclans.commands
 
 import co.aikar.commands.BaseCommand
-import co.aikar.commands.annotation.CommandAlias
-import co.aikar.commands.annotation.CommandPermission
-import co.aikar.commands.annotation.Subcommand
+import co.aikar.commands.annotation.*
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import ru.mcsnapix.snapiclans.SnapiClans
@@ -13,9 +12,11 @@ import ru.mcsnapix.snapiclans.extensions.clanUser
 import ru.mcsnapix.snapiclans.extensions.hasMoney
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.extensions.withdrawMoney
-import ru.mcsnapix.snapiclans.registry.ClansRegistry
+import ru.mcsnapix.snapiclans.messenger.SQLMessenger
+import ru.mcsnapix.snapiclans.messenger.message.MessageChatMessage
 import ru.mcsnapix.snapiclans.registry.RolesRegistry
 import ru.mcsnapix.snapiclans.settings.Settings
+import java.util.*
 
 @Suppress("unused")
 @CommandAlias("%clanscommand")
@@ -37,6 +38,13 @@ class ClansCommand : BaseCommand() {
         }
     }
 
+    @CatchUnknown
+    @Default
+    @Subcommand("%clanscommandhelp")
+    fun help(sender: CommandSender) {
+        message.commands().help().forEach { sender.sendMessage(ChatColor.translateAlternateColorCodes('&', it)) }
+    }
+
     @Subcommand("%clanscommandcreate")
     fun create(player: Player, args: Array<String>) {
         val owner = player.name
@@ -48,7 +56,7 @@ class ClansCommand : BaseCommand() {
             return
         }
 
-        if (args.isEmpty()) {
+        if (args.isEmpty() || args.size > 2) {
             player.send(create.use())
             return
         }
@@ -64,7 +72,7 @@ class ClansCommand : BaseCommand() {
             player.send(create.clanDisplayNameInvalid())
             return
         }
-        if (ClansRegistry.get(name) != null) {
+        if (SnapiClansApi.clan(name) != null) {
             player.send(create.clanAlreadyCreate())
             return
         }
@@ -138,6 +146,31 @@ class ClansCommand : BaseCommand() {
 
     @Subcommand("%clanscommandchat")
     fun chat(player: Player, args: Array<String>) {
+        val chat = message.commands().chat()
+        val user = SnapiClansApi.user(player.name)
 
+        if (user == null) {
+            player.send(chat.noClan())
+            return
+        }
+
+        if (args.isEmpty()) {
+            player.send(chat.writeMessage())
+            return
+        }
+
+        val message = StringBuilder()
+        for (arg in args) {
+            message.append(arg).append(" ")
+        }
+        var msg = message.toString()
+
+        if (!player.hasPermission("snapiclans.chat.color")) {
+            msg = "&([A-z0-9])".toRegex().replace(msg, "")
+        }
+
+        player.send(Settings.config.chatFormat().replace("%message%", msg)
+            .replace("%sender%", player.name))
+        SQLMessenger.sendOutgoingMessage(MessageChatMessage(UUID.randomUUID(), user.username, user.clan.name, msg))
     }
 }

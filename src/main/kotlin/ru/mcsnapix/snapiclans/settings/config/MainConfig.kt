@@ -15,6 +15,10 @@ interface MainConfig {
         @DefaultString("clan|clans|guilds|guild")
         fun mainCommand(): String
 
+        @ConfKey("help-command")
+        @DefaultString("help")
+        fun helpCommand(): String
+
         @ConfKey("create-command")
         @DefaultString("create")
         fun createCommand(): String
@@ -105,4 +109,12 @@ interface MainConfig {
         @DefaultInteger(1000)
         fun createClan(): Int
     }
+
+    @ConfKey("chat-format")
+    @DefaultString("%sender% > %message%")
+    fun chatFormat(): String
+
+    @ConfKey("invite-reply-seconds")
+    @DefaultInteger(20)
+    fun inviteReplySeconds(): Int
 }

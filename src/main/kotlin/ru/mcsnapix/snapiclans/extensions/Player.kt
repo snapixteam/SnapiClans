@@ -16,8 +16,8 @@ fun Player.send(message: String) {
     result = ChatColor.translateAlternateColorCodes('&', message)
     result = parsePlayer(result, this)
 
-    if (result.contains("<mm>", true)) {
-        result = result.replace("<mm>", "", true)
+    if (result.contains("<mm>")) {
+        result = result.replace("<mm>", "")
         val audience = SnapiClans.instance.adventure().player(this)
         audience.sendMessage(mm.deserialize(result))
     } else {

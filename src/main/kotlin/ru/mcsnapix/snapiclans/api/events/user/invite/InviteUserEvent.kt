@@ -6,7 +6,8 @@ import org.bukkit.event.HandlerList
 import ru.mcsnapix.snapiclans.api.clans.Clan
 
 class InviteUserEvent(
-    val player: Player,
+    val inviter: String,
+    val invited: String,
     val clan: Clan
 ) : Event() {
     companion object {

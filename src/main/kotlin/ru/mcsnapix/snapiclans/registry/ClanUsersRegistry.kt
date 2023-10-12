@@ -6,7 +6,7 @@ import ru.mcsnapix.snapiclans.database.Database
 internal object ClanUsersRegistry {
     private val users = mutableMapOf<String, ClanUser>()
 
-    fun get(name: String): ClanUser? {
+    operator fun get(name: String): ClanUser? {
         if (!users.containsKey(name)) {
             if (!add(name)) {
                 return null

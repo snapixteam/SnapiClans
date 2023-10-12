@@ -3,14 +3,16 @@ package ru.mcsnapix.snapiclans.messenger
 import co.aikar.idb.DB
 import com.google.gson.JsonObject
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.scheduler.BukkitTask
 import ru.mcsnapix.snapiclans.Part
 import ru.mcsnapix.snapiclans.SnapiClans
+import ru.mcsnapix.snapiclans.api.SnapiClansApi
 import ru.mcsnapix.snapiclans.extensions.Gson
-import ru.mcsnapix.snapiclans.messenger.message.AbstractMessage
-import ru.mcsnapix.snapiclans.messenger.message.ClanUpdateMessage
-import ru.mcsnapix.snapiclans.messenger.message.OutgoingMessage
-import ru.mcsnapix.snapiclans.registry.ClansRegistry
+import ru.mcsnapix.snapiclans.extensions.send
+import ru.mcsnapix.snapiclans.messenger.message.*
+import ru.mcsnapix.snapiclans.registry.invite.InvitationRegistry
+import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -107,6 +109,10 @@ object SQLMessenger : Part() {
 
         val decoded: AbstractMessage? = when (type) {
             ClanUpdateMessage.TYPE -> ClanUpdateMessage.decode(content, id)
+            UserUpdateMessage.TYPE -> UserUpdateMessage.decode(content, id)
+            MessageChatMessage.TYPE -> MessageChatMessage.decode(content, id)
+            InviteMessage.TYPE -> InviteMessage.decode(content, id)
+            ResponseInvitationMessage.TYPE -> ResponseInvitationMessage.decode(content, id)
             else -> null
         }
 
@@ -115,7 +121,33 @@ object SQLMessenger : Part() {
 
     private fun processIncomingMessage(message: AbstractMessage) {
         if (message is ClanUpdateMessage) {
-            ClansRegistry.update(message.name)
+            SnapiClansApi.updateClan(message.name)
+            return
+        }
+        if (message is UserUpdateMessage) {
+            SnapiClansApi.updateUser(message.name)
+        }
+        if (message is MessageChatMessage) {
+            SnapiClansApi.clan(message.clan)?.let {
+                it.members.forEach { user ->
+                    if (user.username != message.sender) {
+                        user.player?.sendMessage(
+                            ChatColor.translateAlternateColorCodes(
+                                '&',
+                                Settings.config.chatFormat()
+                                    .replace("%sender%", message.sender)
+                                    .replace("%message%", message.message)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+        if (message is InviteMessage) {
+            SnapiClansApi.clan(message.clan)?.let { InvitationRegistry.add(message.inviter, message.invited, it) }
+        }
+        if (message is InviteMessage) {
+            SnapiClansApi.clan(message.clan)?.let { InvitationRegistry.remove(message.inviter, message.invited, it) }
         }
     }
 }

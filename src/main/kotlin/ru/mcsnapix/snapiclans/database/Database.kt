@@ -54,6 +54,10 @@ internal object Database : Part() {
         DB.executeUpdate(REMOVE_CLAN, id)
     }
 
+    fun changeClanDisplayName(name: String, displayName: String) {
+        DB.executeUpdate(CHANGE_CLAN_DISPLAY_NAME, displayName, name)
+    }
+
     fun userClan(username: String): Clan? {
         val result = DB.getFirstRow(SELECT_USER_CLAN, username) ?: return null
         return Clan(result)
@@ -138,6 +142,9 @@ internal object Database : Part() {
 
     @Language("SQL")
     private const val INSERT_CLAN = "INSERT IGNORE INTO clan_clans(`name`, `display_name`, `owner`) VALUES (?, ?, ?)"
+
+    @Language("SQL")
+    private const val CHANGE_CLAN_DISPLAY_NAME = "UPDATE clan_clans SET `display_name` = ? WHERE `name` = ?"
 
     @Language("SQL")
     private const val REMOVE_CLAN = "DELETE FROM clan_clans WHERE `id` = ?"

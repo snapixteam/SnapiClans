@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.api.clans
+package ru.mcsnapix.snapiclansold.api.clans
 
 enum class ClanPermission(val value: String) {
     INVITE("invite"),

@@ -1,12 +1,12 @@
-package ru.mcsnapix.snapiclans.api.clans
+package ru.mcsnapix.snapiclansold.api.clans
 
 import co.aikar.idb.DbRow
-import ru.mcsnapix.snapiclans.database.Database
+import ru.mcsnapix.snapiclansold.database.Database
 
 data class Clan(private val dbRow: DbRow) {
     val id: Int = dbRow.getInt("id")
     val name: String = dbRow.getString("name")
     val displayName: String = dbRow.getString("display_name")
     val owner: String = dbRow.getString("owner")
-    val members: List<User> = Database.users(id)
+    val members: List<ClanUser> = Database.users(id)
 }

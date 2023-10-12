@@ -1,11 +1,10 @@
 package ru.mcsnapix.snapiclans.settings.serializers
 
 import ru.mcsnapix.snapiclans.api.clans.ClanPermission
-import ru.mcsnapix.snapiclans.api.clans.role.ClanRole
+import ru.mcsnapix.snapiclans.api.clans.ClanRole
 import space.arim.dazzleconf.serialiser.Decomposer
 import space.arim.dazzleconf.serialiser.FlexibleType
 import space.arim.dazzleconf.serialiser.ValueSerialiser
-
 
 class ClanRoleSerializer : ValueSerialiser<ClanRole> {
     companion object {

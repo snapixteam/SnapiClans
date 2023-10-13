@@ -4,23 +4,20 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import ru.mcsnapix.snapiclans.api.ClanAPI
-import ru.mcsnapix.snapiclans.api.clans.Clan
-import ru.mcsnapix.snapiclans.api.events.CreateClanEvent
+import ru.mcsnapix.snapiclans.api.events.CreateUserEvent
 import ru.mcsnapix.snapiclans.caching.Action
 import ru.mcsnapix.snapiclans.caching.ActionType
 import ru.mcsnapix.snapiclans.caching.Messenger.encodeMessage
-import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
-import ru.mcsnapix.snapiclans.database.ClanDatabase
-import ru.mcsnapix.snapiclans.database.Database
+import ru.mcsnapix.snapiclans.caching.cache.UserCaches
 import java.util.*
 
-class CreateClanAction(id: UUID, val name: String) : Action(id) {
-    override val type: ActionType = ActionType.CREATE_CLAN
+class CreateUserAction(id: UUID, val name: String) : Action(id) {
+    override val type: ActionType = ActionType.CREATE_USER
 
     override fun executeIncomingMessage() {
-        ClanCaches.add(name)
-        ClanCaches[name]?.let {
-            ClanAPI.callEvent(CreateClanEvent(it))
+        UserCaches.add(name)
+        UserCaches[name]?.let {
+            ClanAPI.callEvent(CreateUserEvent(it))
         }
     }
 
@@ -33,12 +30,12 @@ class CreateClanAction(id: UUID, val name: String) : Action(id) {
     }
 
     companion object {
-        fun decode(content: JsonElement?, id: UUID): CreateClanAction {
+        fun decode(content: JsonElement?, id: UUID): CreateUserAction {
             checkNotNull(content) { "Missing content" }
 
             val name = elementAsString("name", content)
 
-            return CreateClanAction(id, name)
+            return CreateUserAction(id, name)
         }
     }
 }

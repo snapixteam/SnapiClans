@@ -5,15 +5,11 @@ import co.aikar.commands.annotation.*
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.mcsnapix.snapiclansold.SnapiClans
-import ru.mcsnapix.snapiclansold.api.SnapiClansApi
-import ru.mcsnapix.snapiclansold.api.clans.ClanPermission
-import ru.mcsnapix.snapiclans.extensions.clanUser
+import ru.mcsnapix.snapiclans.SnapiClans
+import ru.mcsnapix.snapiclans.api.ClanAPI
 import ru.mcsnapix.snapiclans.extensions.hasMoney
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.extensions.withdrawMoney
-import ru.mcsnapix.snapiclansold.messenger.SQLMessenger
-import ru.mcsnapix.snapiclansold.messenger.message.MessageChatMessage
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
 
@@ -50,8 +46,8 @@ class ClansCommand : BaseCommand() {
         val create = message.commands().create()
         val regex = config.regex()
 
-        if (SnapiClansApi.user(owner) != null) {
-            ru.mcsnapix.snapiclans.extensions.send(create.alreadyInClan())
+        if (ClanAPI.user(owner) != null) {
+            player.send(create.alreadyInClan())
             return
         }
 

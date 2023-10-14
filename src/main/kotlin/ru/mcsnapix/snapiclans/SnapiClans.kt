@@ -21,12 +21,15 @@ class SnapiClans : JavaPlugin() {
     }
 
     override fun onEnable() {
+        instance = this
+        adventure = BukkitAudiences.create(this)
+        setupEconomy()
+
         Settings.enable()
         Database.enable()
         Caches.enable()
         Messenger.enable()
         Commands.enable()
-        setupEconomy()
     }
 
     fun reload() {
@@ -38,6 +41,10 @@ class SnapiClans : JavaPlugin() {
         Messenger.disable()
         Caches.disable()
         Database.disable()
+        adventure?.let {
+            adventure!!.close()
+            adventure = null
+        }
     }
 
     private fun setupEconomy() {

@@ -12,8 +12,9 @@ interface MessageConfig {
         @DefaultStrings("Hello", "world??", "!")
         fun help(): List<String>
 
+        @ConfKey("create-clan")
         @SubSection
-        fun create(): CreateCommand
+        fun createClan(): CreateCommand
         interface CreateCommand {
             @ConfKey("already-in-clan")
             @DefaultString("&cВы уже в клане")
@@ -44,8 +45,9 @@ interface MessageConfig {
             fun success(): String
         }
 
+        @ConfKey("remove-clan")
         @SubSection
-        fun remove(): RemoveCommand
+        fun removeClan(): RemoveCommand
         interface RemoveCommand {
             @ConfKey("no-clan")
             @DefaultString("&cВы не в клане")

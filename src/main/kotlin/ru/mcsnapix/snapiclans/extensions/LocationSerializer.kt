@@ -6,7 +6,6 @@ import org.bukkit.Location
 val Location.string: String
     get() = "${this.x};${this.y};${this.z};${this.world.name};${this.yaw};${this.pitch}"
 
-
 val String.location: Location?
     get() {
         val parts = this.split(";".toRegex())

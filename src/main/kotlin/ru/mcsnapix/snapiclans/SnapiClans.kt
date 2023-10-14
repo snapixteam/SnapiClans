@@ -3,13 +3,12 @@ package ru.mcsnapix.snapiclans
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.plugin.java.JavaPlugin
+import ru.mcsnapix.snapiclans.caching.Messenger
+import ru.mcsnapix.snapiclans.caching.cache.Caches
 import ru.mcsnapix.snapiclans.commands.Commands
 import ru.mcsnapix.snapiclans.database.Database
-import ru.mcsnapix.snapiclans.listeners.Listeners
-import ru.mcsnapix.snapiclans.messenger.SQLMessenger
-import ru.mcsnapix.snapiclans.registry.Registry
+import ru.mcsnapix.snapiclans.managers.Manager
 import ru.mcsnapix.snapiclans.settings.Settings
-
 
 class SnapiClans : JavaPlugin() {
     private var adventure: BukkitAudiences? = null
@@ -24,27 +23,29 @@ class SnapiClans : JavaPlugin() {
     override fun onEnable() {
         instance = this
         adventure = BukkitAudiences.create(this)
+        setupEconomy()
 
         Settings.enable()
         Database.enable()
-        Listeners.enable()
+        Manager.enable()
+        Caches.enable()
+        Messenger.enable()
         Commands.enable()
-        Registry.enable()
-        SQLMessenger.enable()
-        setupEconomy()
     }
 
     fun reload() {
         Settings.reload()
-        Registry.reload()
+        Manager.reload()
     }
 
     override fun onDisable() {
+        Messenger.disable()
+        Caches.disable()
         Database.disable()
-        Registry.disable()
-        SQLMessenger.disable()
+        Manager.disable()
+
         adventure?.let {
-            adventure!!.close()
+            it.close()
             adventure = null
         }
     }
@@ -61,7 +62,6 @@ class SnapiClans : JavaPlugin() {
 
     fun adventure(): BukkitAudiences {
         checkNotNull(adventure) { "Tried to access Adventure when the plugin was disabled!" }
-        return adventure!!
+        return adventure as BukkitAudiences
     }
-
 }

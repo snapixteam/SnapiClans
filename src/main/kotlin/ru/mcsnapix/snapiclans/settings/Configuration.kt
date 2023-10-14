@@ -97,7 +97,10 @@ class Configuration<C> private constructor(private val logger: Logger, configHel
                 options,
                 yamlOptions
             )
-            return Configuration<C>(logger, ConfigurationHelper(configFolder, fileName, configFactory))
+            return Configuration<C>(
+                logger,
+                ConfigurationHelper(configFolder, fileName, configFactory)
+            )
         }
     }
 }

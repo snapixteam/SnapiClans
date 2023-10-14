@@ -4,7 +4,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
 import ru.mcsnapix.snapiclans.SnapiClans
-import ru.mcsnapix.snapiclans.api.SnapiClansApi
 
 val mm = MiniMessage.miniMessage()
 
@@ -24,5 +23,3 @@ fun Player.send(message: String) {
         player.sendMessage(result)
     }
 }
-
-val Player.clanUser get() = SnapiClansApi.user(this.name)

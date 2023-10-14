@@ -1,19 +1,18 @@
 package ru.mcsnapix.snapiclans.commands
 
 import co.aikar.commands.PaperCommandManager
-import ru.mcsnapix.snapiclans.Part
 import ru.mcsnapix.snapiclans.SnapiClans
 import ru.mcsnapix.snapiclans.settings.Settings
 
 
-object Commands : Part() {
+object Commands {
     private val settings = Settings
     private val manager = PaperCommandManager(SnapiClans.instance)
 
-    override fun enable() {
+    fun enable() {
         registerCommandCompletions()
         registerCommandReplacements()
-        manager.registerCommand(ClansCommand())
+        manager.registerCommand(ClanCommands())
     }
 
     private fun registerCommandCompletions() {}

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ru.mcsnapix.${project.name.toLowerCase()}"
-version = "0.0.1-alpha"
+version = "0.0.3"
 
 repositories {
     mavenCentral()
@@ -61,6 +61,7 @@ tasks {
         relocateDependency("org.intellij")
         relocateDependency("kotlin")
         relocateDependency("space.arim.dazzleconf")
+        relocateDependency("net.kyori")
         relocateDependency("co.aikar.idb")
 
         dependencies {

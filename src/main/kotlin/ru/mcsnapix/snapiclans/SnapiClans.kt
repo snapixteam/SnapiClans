@@ -44,8 +44,10 @@ class SnapiClans : JavaPlugin() {
         Database.disable()
         Manager.disable()
 
-        adventure?.close()
-        adventure = null
+        adventure?.let {
+            it.close()
+            adventure = null
+        }
     }
 
     private fun setupEconomy() {
@@ -60,6 +62,6 @@ class SnapiClans : JavaPlugin() {
 
     fun adventure(): BukkitAudiences {
         checkNotNull(adventure) { "Tried to access Adventure when the plugin was disabled!" }
-        return adventure!!
+        return adventure as BukkitAudiences
     }
 }

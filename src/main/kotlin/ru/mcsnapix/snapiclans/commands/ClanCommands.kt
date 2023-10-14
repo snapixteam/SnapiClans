@@ -44,9 +44,9 @@ class ClanCommands : BaseCommand() {
     }
 
     @Subcommand("%clanscommandcreate")
-    fun create(player: Player, args: Array<String>) {
+    fun createClan(player: Player, args: Array<String>) {
         val owner = player.name
-        val create = message.commands().create()
+        val create = message.commands().createClan()
         val regex = config.regex()
 
         if (UserCaches[owner] != null) {
@@ -83,14 +83,14 @@ class ClanCommands : BaseCommand() {
         }
 
         player.withdrawMoney(price)
-        player.send(create.success())
 
         ClanAPI.createClan(name, displayName, owner)
+        player.send(create.success())
     }
 
     @Subcommand("%clanscommandremove")
-    fun remove(player: Player, args: Array<String>) {
-        val remove = message.commands().remove()
+    fun removeClan(player: Player, args: Array<String>) {
+        val remove = message.commands().removeClan()
         val user = UserCaches[player.name]
 
         if (user == null) {
@@ -112,5 +112,28 @@ class ClanCommands : BaseCommand() {
         }
 
         player.send(remove.accept())
+    }
+
+    @Subcommand("%clanscommandchat")
+    fun sendMessage(player: Player, args: Array<String>) {
+        val chat = message.commands().chat()
+        val user = UserCaches[player.name]
+
+        if (user == null) {
+            player.send(chat.noClan())
+            return
+        }
+
+        if (args.isEmpty()) {
+            player.send(chat.writeMessage())
+            return
+        }
+
+        val message = StringBuilder()
+        for (arg in args) {
+            message.append(arg).append(" ")
+        }
+
+        ClanAPI.sendMessage(player, user.clan, message.toString())
     }
 }

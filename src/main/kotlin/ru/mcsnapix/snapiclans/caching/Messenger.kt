@@ -5,7 +5,6 @@ import com.google.gson.*
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 import ru.mcsnapix.snapiclans.SnapiClans
-import ru.mcsnapix.snapiclans.caching.actions.CreateClanAction
 import java.util.*
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -100,11 +99,6 @@ object Messenger {
 
         closed = true
     }
-
-
-
-
-
 
 
     fun encodeMessage(type: ActionType, id: UUID, content: JsonElement): String {

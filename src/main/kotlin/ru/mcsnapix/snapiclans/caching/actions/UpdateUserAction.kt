@@ -3,22 +3,17 @@ package ru.mcsnapix.snapiclans.caching.actions
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import ru.mcsnapix.snapiclans.api.ClanAPI
-import ru.mcsnapix.snapiclans.api.events.RemoveUserEvent
 import ru.mcsnapix.snapiclans.caching.Action
 import ru.mcsnapix.snapiclans.caching.ActionType
 import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
 import java.util.*
 
-class RemoveUserAction(id: UUID, val name: String) : Action(id) {
-    override val type: ActionType = ActionType.REMOVE_USER
+class UpdateUserAction(id: UUID, val name: String) : Action(id) {
+    override val type: ActionType = ActionType.UPDATE_USER
 
     override fun executeIncomingMessage() {
-        UserCaches[name]?.let {
-            ClanAPI.callEvent(RemoveUserEvent(it))
-        }
-        UserCaches.remove(name)
+        UserCaches.refresh(name)
     }
 
     override fun encode(): String {
@@ -30,12 +25,12 @@ class RemoveUserAction(id: UUID, val name: String) : Action(id) {
     }
 
     companion object {
-        fun decode(content: JsonElement?, id: UUID): RemoveUserAction {
+        fun decode(content: JsonElement?, id: UUID): UpdateUserAction {
             checkNotNull(content) { "Missing content" }
 
             val name = elementAsString("name", content)
 
-            return RemoveUserAction(id, name)
+            return UpdateUserAction(id, name)
         }
     }
 }

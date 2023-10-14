@@ -1,12 +1,11 @@
-package ru.mcsnapix.snapiclansold.api.events.clan
+package ru.mcsnapix.snapiclans.api.events
 
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import ru.mcsnapix.snapiclansold.api.clans.Clan
+import ru.mcsnapix.snapiclans.api.clans.Clan
+import ru.mcsnapix.snapiclans.api.clans.User
 
-class RemoveClanEvent(
-    val clan: Clan
-) : Event() {
+class SendMessageEvent(val clan: Clan, val user: User, val message: String) : Event() {
     companion object {
         val HANDLERS: HandlerList = HandlerList()
     }

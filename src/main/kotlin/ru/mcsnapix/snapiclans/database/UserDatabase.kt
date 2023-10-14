@@ -7,12 +7,12 @@ import ru.mcsnapix.snapiclans.api.clans.ClanRole
 import ru.mcsnapix.snapiclans.api.clans.User
 
 object UserDatabase {
-    fun values(): List<User?> {
+    fun values(): List<User> {
         val result = DB.getResults(SELECT_USERS) ?: return emptyList()
         return result.map { User(it) }
     }
 
-    fun values(id: Int): List<User?> {
+    fun values(id: Int): List<User> {
         val result = DB.getResults(SELECT_USERS_WITH_ID, id) ?: return emptyList()
         return result.map { User(it) }
     }
@@ -46,7 +46,8 @@ object UserDatabase {
     private const val SELECT_USERS_WITH_ID = "SELECT * FROM clan_members WHERE clan_id = ?"
 
     @Language("SQL")
-    private const val SELECT_USERS_WITH_CLAN_NAME = "SELECT cm.* FROM clan_members cm JOIN clan_clans c ON cm.clan_id = c.id WHERE c.name = ?"
+    private const val SELECT_USERS_WITH_CLAN_NAME =
+        "SELECT cm.* FROM clan_members cm JOIN clan_clans c ON cm.clan_id = c.id WHERE c.name = ?"
 
     @Language("SQL")
     private const val SELECT_USER_WITH_NAME = "SELECT * FROM clan_members WHERE `username` = ?"

@@ -2,7 +2,7 @@ package ru.mcsnapix.snapiclans.extensions
 
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
-import ru.mcsnapix.snapiclansold.SnapiClans
+import ru.mcsnapix.snapiclans.SnapiClans
 
 val economy: Economy
     get() = SnapiClans.instance.economy

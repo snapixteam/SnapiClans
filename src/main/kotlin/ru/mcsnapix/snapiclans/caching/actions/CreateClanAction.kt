@@ -4,14 +4,11 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import ru.mcsnapix.snapiclans.api.ClanAPI
-import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.api.events.CreateClanEvent
 import ru.mcsnapix.snapiclans.caching.Action
 import ru.mcsnapix.snapiclans.caching.ActionType
 import ru.mcsnapix.snapiclans.caching.Messenger.encodeMessage
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
-import ru.mcsnapix.snapiclans.database.ClanDatabase
-import ru.mcsnapix.snapiclans.database.Database
 import java.util.*
 
 class CreateClanAction(id: UUID, val name: String) : Action(id) {

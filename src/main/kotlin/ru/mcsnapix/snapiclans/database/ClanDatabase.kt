@@ -41,16 +41,23 @@ object ClanDatabase {
 
     @Language("SQL")
     private const val SELECT_CLANS = "SELECT * FROM clan_clans"
+
     @Language("SQL")
     private const val SELECT_CLAN_WITH_ID = "SELECT * FROM clan_clans WHERE `id` = ?"
+
     @Language("SQL")
     private const val SELECT_CLAN_WITH_NAME = "SELECT * FROM clan_clans WHERE `name` = ?"
+
     @Language("SQL")
-    private const val SELECT_CLAN_WITH_USER = "SELECT * FROM clan_clans WHERE `id`=(SELECT `clan_id` FROM `clan_members` WHERE `username` = ?)"
+    private const val SELECT_CLAN_WITH_USER =
+        "SELECT * FROM clan_clans WHERE `id`=(SELECT `clan_id` FROM `clan_members` WHERE `username` = ?)"
+
     @Language("SQL")
     private const val CHANGE_CLAN_DISPLAY_NAME = "UPDATE clan_clans SET `display_name` = ? WHERE `name` = ?"
+
     @Language("SQL")
     private const val CREATE_CLAN = "INSERT IGNORE INTO clan_clans(`name`, `display_name`, `owner`) VALUES (?, ?, ?)"
+
     @Language("SQL")
     private const val REMOVE_CLAN = "DELETE FROM clan_clans WHERE `id` = ?"
 }

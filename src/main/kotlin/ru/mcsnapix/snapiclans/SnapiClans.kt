@@ -3,7 +3,9 @@ package ru.mcsnapix.snapiclans
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.plugin.java.JavaPlugin
+import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.caching.cache.Caches
+import ru.mcsnapix.snapiclans.commands.Commands
 import ru.mcsnapix.snapiclans.database.Database
 import ru.mcsnapix.snapiclans.managers.Manager
 import ru.mcsnapix.snapiclans.settings.Settings
@@ -22,6 +24,8 @@ class SnapiClans : JavaPlugin() {
         Settings.enable()
         Database.enable()
         Caches.enable()
+        Messenger.enable()
+        Commands.enable()
         setupEconomy()
     }
 
@@ -31,6 +35,7 @@ class SnapiClans : JavaPlugin() {
     }
 
     override fun onDisable() {
+        Messenger.disable()
         Caches.disable()
         Database.disable()
     }

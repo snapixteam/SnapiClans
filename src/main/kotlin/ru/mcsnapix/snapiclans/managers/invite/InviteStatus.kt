@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclansold.registry.invite
+package ru.mcsnapix.snapiclans.managers.invite
 
 enum class InviteStatus {
     ACCEPT,

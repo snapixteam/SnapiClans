@@ -3,8 +3,7 @@ package ru.mcsnapix.snapiclans.extensions
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
-import ru.mcsnapix.snapiclansold.SnapiClans
-import ru.mcsnapix.snapiclansold.api.SnapiClansApi
+import ru.mcsnapix.snapiclans.SnapiClans
 
 val mm = MiniMessage.miniMessage()
 

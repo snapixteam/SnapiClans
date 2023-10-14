@@ -9,7 +9,8 @@ import ru.mcsnapix.snapiclans.settings.Settings
 object Database {
     fun enable() {
         val config = Settings.database
-        val databaseOptions = DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
+        val databaseOptions =
+            DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
                 .build()
         val db = PooledDatabaseOptions.builder().options(databaseOptions).createHikariDatabase()
         DB.setGlobalDatabase(db)

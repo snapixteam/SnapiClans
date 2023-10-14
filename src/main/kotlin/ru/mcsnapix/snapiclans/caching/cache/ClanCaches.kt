@@ -36,7 +36,7 @@ object ClanCaches {
 
     fun enable() {
         ClanDatabase.values().forEach {
-            it?.let {clan -> clans[clan.name] = clan }
+            it?.let { clan -> clans[clan.name] = clan }
         }
     }
 

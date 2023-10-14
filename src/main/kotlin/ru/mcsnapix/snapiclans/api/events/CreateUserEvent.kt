@@ -2,7 +2,6 @@ package ru.mcsnapix.snapiclans.api.events
 
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import ru.mcsnapix.snapiclans.api.clans.Clan
 import ru.mcsnapix.snapiclans.api.clans.User
 
 class CreateUserEvent(val user: User) : Event() {

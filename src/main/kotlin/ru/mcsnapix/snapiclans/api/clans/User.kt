@@ -12,5 +12,6 @@ data class User(private val dbRow: DbRow) {
     val name: String = dbRow.getString("username")
     val player: Player?
         get() = Bukkit.getPlayer(name)
-    val role: ClanRole = RoleManager.clanRoles[dbRow.getString("role")] ?: throw IllegalArgumentException("Role not found in config")
+    val role: ClanRole =
+        RoleManager.clanRoles[dbRow.getString("role")] ?: throw IllegalArgumentException("Role not found in config")
 }

@@ -31,7 +31,7 @@ object UserCaches {
 
     fun enable() {
         UserDatabase.values().forEach {
-            it?.let {user -> users[user.name] = user }
+            users[it.name] = it
         }
     }
 

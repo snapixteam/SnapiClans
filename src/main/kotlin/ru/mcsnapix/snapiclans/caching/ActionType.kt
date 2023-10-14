@@ -39,17 +39,17 @@ enum class ActionType {
         override fun decode(content: JsonElement, id: UUID): Action {
             return SendMessageAction.decode(content, id)
         }
-    },
-    SEND_INVITE {
-        override fun decode(content: JsonElement, id: UUID): Action {
-            return SendInviteAction.decode(content, id)
-        }
-    },
-    SEND_INVITE_RESPONSE {
-        override fun decode(content: JsonElement, id: UUID): Action {
-            return SendInviteResponseAction.decode(content, id)
-        }
-    }
+    };
+//    SEND_INVITE {
+//        override fun decode(content: JsonElement, id: UUID): Action {
+//            return SendInviteAction.decode(content, id)
+//        }
+//    },
+//    SEND_INVITE_RESPONSE {
+//        override fun decode(content: JsonElement, id: UUID): Action {
+//            return SendInviteResponseAction.decode(content, id)
+//        }
+//    };
 
     abstract fun decode(content: JsonElement, id: UUID): Action
 }

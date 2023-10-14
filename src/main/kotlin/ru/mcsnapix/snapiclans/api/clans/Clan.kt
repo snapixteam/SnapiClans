@@ -8,5 +8,5 @@ data class Clan(private val dbRow: DbRow) {
     val name: String = dbRow.getString("name")
     val displayName: String = dbRow.getString("display_name")
     val owner: String = dbRow.getString("owner")
-    val members: List<User> = UserDatabase.values(id)
+    val members: List<User> = UserDatabase.values(id).filterNotNull()
 }

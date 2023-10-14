@@ -27,6 +27,7 @@ class SnapiClans : JavaPlugin() {
 
         Settings.enable()
         Database.enable()
+        Manager.enable()
         Caches.enable()
         Messenger.enable()
         Commands.enable()
@@ -41,10 +42,10 @@ class SnapiClans : JavaPlugin() {
         Messenger.disable()
         Caches.disable()
         Database.disable()
-        adventure?.let {
-            adventure!!.close()
-            adventure = null
-        }
+        Manager.disable()
+
+        adventure?.close()
+        adventure = null
     }
 
     private fun setupEconomy() {

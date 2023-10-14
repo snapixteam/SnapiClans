@@ -11,7 +11,6 @@ import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
 import ru.mcsnapix.snapiclans.database.ClanDatabase
 import ru.mcsnapix.snapiclans.database.UserDatabase
-import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.managers.RoleManager
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
@@ -58,7 +57,7 @@ object ClanAPI {
                 .replace("%message%", msg)
         )
 
-        player.send(msg)
+        player.sendMessage(msg)
 
         Messenger.sendOutgoingMessage(SendMessageAction(UUID.randomUUID(), sender, nameClan, msg))
     }

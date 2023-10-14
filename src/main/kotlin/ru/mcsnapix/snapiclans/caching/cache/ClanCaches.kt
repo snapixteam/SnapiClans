@@ -15,7 +15,8 @@ object ClanCaches {
     }
 
     operator fun get(id: Int): Clan? {
-        return clans.values.find { it.id == id }
+        val result = clans.values.find { it.id == id }
+        return result
     }
 
     fun add(name: String): Boolean {
@@ -35,8 +36,8 @@ object ClanCaches {
 
 
     fun enable() {
-        ClanDatabase.values().forEach {
-            it?.let { clan -> clans[clan.name] = clan }
+        ClanDatabase.values().filterNotNull().forEach {
+            clans[it.name] = it
         }
     }
 

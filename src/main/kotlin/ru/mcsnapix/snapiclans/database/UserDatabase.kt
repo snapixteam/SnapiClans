@@ -7,12 +7,12 @@ import ru.mcsnapix.snapiclans.api.clans.ClanRole
 import ru.mcsnapix.snapiclans.api.clans.User
 
 object UserDatabase {
-    fun values(): List<User> {
+    fun values(): List<User?> {
         val result = DB.getResults(SELECT_USERS) ?: return emptyList()
         return result.map { User(it) }
     }
 
-    fun values(id: Int): List<User> {
+    fun values(id: Int): List<User?> {
         val result = DB.getResults(SELECT_USERS_WITH_ID, id) ?: return emptyList()
         return result.map { User(it) }
     }

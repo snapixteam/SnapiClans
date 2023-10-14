@@ -30,7 +30,7 @@ object UserCaches {
     }
 
     fun enable() {
-        UserDatabase.values().forEach {
+        UserDatabase.values().filterNotNull().forEach {
             users[it.name] = it
         }
     }

@@ -48,13 +48,13 @@ sonar {
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 
     compileKotlin {
         kotlinOptions {
-            jvmTarget = "17"
+            jvmTarget = "11"
         }
     }
 

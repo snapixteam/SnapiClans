@@ -103,12 +103,10 @@ class ClanCommands : BaseCommand() {
             return
         }
 
-        if (args.size == 1) {
-            if (args[0].lowercase() == "accept") {
-                ClanAPI.removeClan(user.clan)
-                player.send(remove.success())
-                return
-            }
+        if (args.size == 1 && args[0].lowercase() == "accept") {
+            ClanAPI.removeClan(user.clan)
+            player.send(remove.success())
+            return
         }
 
         player.send(remove.accept())

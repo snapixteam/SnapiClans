@@ -23,6 +23,13 @@ class ClanCommands : BaseCommand() {
     private val config = settings.config
     private val message = settings.message
 
+    @CatchUnknown
+    @Default
+    @Subcommand("%clanscommandhelp")
+    fun help(sender: CommandSender) {
+        message.commands().help().forEach { sender.sendMessage(ChatColor.translateAlternateColorCodes('&', it)) }
+    }
+
     @CommandPermission("snapiclans.admin")
     @Subcommand("admin")
     fun admin(sender: CommandSender, args: Array<String>) {
@@ -34,13 +41,6 @@ class ClanCommands : BaseCommand() {
                 }
             }
         }
-    }
-
-    @CatchUnknown
-    @Default
-    @Subcommand("%clanscommandhelp")
-    fun help(sender: CommandSender) {
-        message.commands().help().forEach { sender.sendMessage(ChatColor.translateAlternateColorCodes('&', it)) }
     }
 
     @Subcommand("%clanscommandcreate")

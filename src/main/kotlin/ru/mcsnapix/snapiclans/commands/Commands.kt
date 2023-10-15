@@ -1,5 +1,6 @@
 package ru.mcsnapix.snapiclans.commands
 
+import co.aikar.commands.ConditionFailedException
 import co.aikar.commands.PaperCommandManager
 import ru.mcsnapix.snapiclans.SnapiClans
 import ru.mcsnapix.snapiclans.settings.Settings
@@ -15,7 +16,14 @@ object Commands {
         manager.registerCommand(ClanCommands())
     }
 
-    private fun registerCommandCompletions() {}
+    private fun registerCommandCompletions() {
+        manager.commandConditions.addCondition("fly") {
+            val issuer = it.issuer
+            if (!issuer.player.isFlying) {
+                throw ConditionFailedException("Target player must fly")
+            }
+        }
+    }
 
     private fun registerCommandReplacements() {
         val replacements = manager.commandReplacements

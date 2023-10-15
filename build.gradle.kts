@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.8.21"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "ru.mcsnapix.${project.name.toLowerCase()}"
@@ -36,17 +37,24 @@ fun com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar.relocateDependenc
     relocate(pkg, "$libs.$pkg")
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "snapixteam_SnapiClans")
+        property("sonar.organization", "snapixteam")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
 
     compileKotlin {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "17"
         }
     }
 

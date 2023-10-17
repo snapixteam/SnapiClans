@@ -12,6 +12,10 @@ import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
 import java.util.*
 
+/**
+ * @author Flaimer
+ * @since 0.0.3
+ */
 class SendMessageAction(id: UUID, val sender: String, val clan: String, val message: String) : Action(id) {
     override val type: ActionType = ActionType.SEND_MESSAGE
 

@@ -4,6 +4,10 @@ import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import ru.mcsnapix.snapiclans.api.clans.User
 
+/**
+ * @author Flaimer
+ * @since 0.0.3
+ */
 class CreateUserEvent(val user: User) : Event() {
     companion object {
         val HANDLERS: HandlerList = HandlerList()

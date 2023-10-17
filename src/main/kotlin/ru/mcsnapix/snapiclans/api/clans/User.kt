@@ -6,6 +6,13 @@ import org.bukkit.entity.Player
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.managers.RoleManager
 
+/**
+ * The Clan User class provides access to the properties of the user.
+ *
+ * @author Flaimer
+ * @since 0.0.1
+ * @see ClanRole
+ */
 data class User(private val dbRow: DbRow) {
     val name: String = dbRow.getString("username")
     val clan: Clan

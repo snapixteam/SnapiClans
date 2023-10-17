@@ -78,7 +78,7 @@ interface MessageConfig {
             fun noPermission(): String
 
             @ConfKey("accept-or-decline")
-            @DefaultString("&aНажмите, чтобы потвердить удаление (clans accept player, clans decline player)")
+            @DefaultString("&aНажмите, чтобы потвердить пригласить (clans accept player, clans decline player)")
             fun acceptOrDecline(): String
 
             @ConfKey("success")
@@ -96,6 +96,30 @@ interface MessageConfig {
             @ConfKey("write-message")
             @DefaultString("&aНапишите сообщение")
             fun writeMessage(): String
+        }
+
+        @SubSection
+        fun role(): RoleCommand
+        interface RoleCommand {
+            @ConfKey("no-clan")
+            @DefaultString("&cВы не в клане")
+            fun noClan(): String
+
+            @ConfKey("no-permission")
+            @DefaultString("&cУ вас нет разрешения, чтобы изменить роль")
+            fun noPermission(): String
+
+            @ConfKey("use")
+            @DefaultString("&cИспользуйте: /clan role increase/decrease <имя>")
+            fun use(): String
+
+            @ConfKey("success-increase")
+            @DefaultString("&cВы успешно повысили %player_name%")
+            fun successIncrease(): String
+
+            @ConfKey("success-decrease")
+            @DefaultString("&cВы успешно понизили %player_name%")
+            fun successDecrease(): String
         }
     }
 }

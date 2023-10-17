@@ -5,6 +5,7 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import ru.mcsnapix.snapiclans.api.clans.Clan
+import ru.mcsnapix.snapiclans.api.clans.User
 import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.caching.actions.*
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
@@ -16,13 +17,27 @@ import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
 
 object ClanAPI {
+    /**
+    * Calls the specified event.
+    * @param event The event to be called.
+    */
+    @JvmStatic
     fun callEvent(event: Event) {
         Bukkit.getPluginManager().callEvent(event)
     }
 
+    @JvmStatic
     fun clans() = ClanCaches
+    @JvmStatic
     fun users() = UserCaches
 
+    /**
+     * Creates a new clan.
+     * @param name The name of the clan
+     * @param displayName The display name of the clan.
+     * @param owner The owner of the clan.
+     */
+    @JvmStatic
     fun createClan(name: String, displayName: String, owner: String) {
         ClanDatabase.add(name, displayName, owner)
         ClanDatabase[name]?.let {
@@ -33,6 +48,11 @@ object ClanAPI {
         Messenger.sendOutgoingMessage(UpdateClanAction(UUID.randomUUID(), name))
     }
 
+    /**
+     * Removes the specified clan.
+     * @param clan The clan to be removed.
+     */
+    @JvmStatic
     fun removeClan(clan: Clan) {
         val name = clan.name
         clan.members.forEach {
@@ -42,7 +62,13 @@ object ClanAPI {
         ClanDatabase.remove(name)
         Messenger.sendOutgoingMessage(RemoveClanAction(UUID.randomUUID(), name))
     }
-
+    /**
+    * Sends a clan message.
+    * @param player The player who sends a message to the clan chat.
+    * @param clan The clan in which [User] should receive the message
+    * @param message The message to be sent.
+     */
+    @JvmStatic
     fun sendMessage(player: Player, clan: Clan, message: String) {
         var msg = if (!player.hasPermission("snapiclans.chat.color")) "&([A-z0-9])".toRegex()
             .replace(message, "") else message

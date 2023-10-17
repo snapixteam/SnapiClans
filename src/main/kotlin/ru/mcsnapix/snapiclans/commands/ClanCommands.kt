@@ -134,4 +134,27 @@ class ClanCommands : BaseCommand() {
 
         ClanAPI.sendMessage(player, user.clan, message.toString())
     }
+
+    @Subcommand("%clanscommandrole")
+    fun role(player: Player, args: Array<String>) {
+        val role = message.commands().role()
+        val user = UserCaches[player.name]
+
+        if (user == null) {
+            player.send(role.noClan())
+            return
+        }
+
+        if (!user.role.permissions.contains(ClanPermission.SET_ROLE)) {
+            player.send(role.noPermission())
+            return
+        }
+
+        // increase/decrease <name>
+        if (args.size < 1) {
+            player.send(role.)
+            return
+        }
+
+    }
 }

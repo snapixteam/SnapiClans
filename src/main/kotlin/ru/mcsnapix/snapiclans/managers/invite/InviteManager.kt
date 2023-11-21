@@ -14,13 +14,14 @@ import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.managers.RoleManager
 import ru.mcsnapix.snapiclans.settings.Settings
+import java.sql.Timestamp
 import java.util.*
 
 object InviteManager {
     private var pollTask: BukkitTask? = null
 
     fun enable() {
-        pollTask = Bukkit.getScheduler().runTaskTimerAsynchronously(SnapiClans.instance, { pollMessages() }, 0L, 20L)
+        pollTask = Bukkit.getScheduler().runTaskTimerAsynchronously(SnapiClans.instance, { pollMessages() }, 0L, 60L)
     }
 
     fun disable() {
@@ -35,9 +36,8 @@ object InviteManager {
                 val clanId = it.getInt("clan_id")
                 val sender = it.getString("sender")
                 val receiver = it.getString("receiver")
-                val time = it.getInt("time")
-
-                if (time * 1000 >= Settings.config.inviteReplySeconds() * 1000 + System.currentTimeMillis()) {
+                val time = it.get<Timestamp>("time")
+                if (time.time >= Settings.config.inviteReplySeconds() * 1000 + System.currentTimeMillis()) {
                     ignore(sender, receiver)
                 }
             }

@@ -24,6 +24,7 @@ dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("com.alessiodp.lastloginapi:lastloginapi-api:1.7.2")
+    compileOnly("net.luckperms:api:5.4")
 
     implementation("co.aikar:idb-core:1.0.0-SNAPSHOT")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")

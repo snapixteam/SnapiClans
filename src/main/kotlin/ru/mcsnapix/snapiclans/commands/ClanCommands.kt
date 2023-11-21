@@ -13,10 +13,7 @@ import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.caching.actions.SendResultMessageAction
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
-import ru.mcsnapix.snapiclans.extensions.getLastLoginPlayer
-import ru.mcsnapix.snapiclans.extensions.hasMoney
-import ru.mcsnapix.snapiclans.extensions.send
-import ru.mcsnapix.snapiclans.extensions.withdrawMoney
+import ru.mcsnapix.snapiclans.extensions.*
 import ru.mcsnapix.snapiclans.managers.invite.InviteManager
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
@@ -149,7 +146,8 @@ class ClanCommands : BaseCommand() {
             return
         }
         receiver = lastLoginReceiver.name
-        if (!lastLoginReceiver.isOnline) {
+        val luckPermsReceiver = getLuckPermsUser(receiver)
+        if (luckPermsReceiver == null || !luckPermsReceiver.isOnline()) {
             player.send(config.offline(), Placeholder("name", receiver))
             return
         }

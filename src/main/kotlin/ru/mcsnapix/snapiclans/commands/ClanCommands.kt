@@ -119,7 +119,8 @@ class ClanCommands : BaseCommand() {
     @Subcommand("%clanscommandinvite")
     fun invite(player: Player, args: Array<String>) {
         val config = message.commands().invite()
-        val user = UserCaches[player.name]
+        val name = player.name
+        val user = UserCaches[name]
 
         if (user == null) {
             player.send(config.noClan())
@@ -135,38 +136,77 @@ class ClanCommands : BaseCommand() {
             player.send(config.use())
             return
         }
+        val receiver = args[0]
 
-        val userReceiver = UserCaches[args[0]]
+        val userReceiver = UserCaches[receiver]
         if (userReceiver != null) {
             player.send(config.alreadyClan())
             return
         }
 
-        InviteManager.add(user.clan, user.name, args[0])
+        if (InviteManager.get(name, receiver) != null) {
+            player.send(config.alreadyInvite())
+            return
+        }
+
+        InviteManager.add(user.clan, name, receiver)
         player.send(config.success())
         Messenger.sendOutgoingMessage(
             SendResultMessageAction(
                 UUID.randomUUID(),
-                args[0],
+                receiver,
                 config.acceptOrDecline(),
-                Placeholder("sender", user.name),
+                Placeholder("sender", name),
                 Placeholder("clan", user.clan.name)
             )
         )
     }
 
-    @Subcommand("%clanscommandchat")
-    fun sendMessage(player: Player, args: Array<String>) {
-        val chat = message.commands().chat()
-        val user = UserCaches[player.name]
+    @Subcommand("%clanscommandaccept")
+    fun accept(player: Player, args: Array<String>) {
+        val config = message.commands().accept()
+        val receiver = player.name
+        val userReceiver = UserCaches[receiver]
 
-        if (user == null) {
-            player.send(chat.noClan())
+        if (userReceiver != null) {
+            player.send(config.alreadyClan())
             return
         }
 
         if (args.isEmpty()) {
-            player.send(chat.writeMessage())
+            player.send(config.use())
+            return
+        }
+        val sender = args[0]
+
+        InviteManager.accept(sender, player)
+    }
+
+    @Subcommand("%clanscommanddecline")
+    fun decline(player: Player, args: Array<String>) {
+        val config = message.commands().decline()
+
+        if (args.isEmpty()) {
+            player.send(config.use())
+            return
+        }
+        val sender = args[0]
+
+        InviteManager.decline(sender, player)
+    }
+
+    @Subcommand("%clanscommandchat")
+    fun sendMessage(player: Player, args: Array<String>) {
+        val config = message.commands().chat()
+        val user = UserCaches[player.name]
+
+        if (user == null) {
+            player.send(config.noClan())
+            return
+        }
+
+        if (args.isEmpty()) {
+            player.send(config.writeMessage())
             return
         }
 
@@ -194,10 +234,10 @@ class ClanCommands : BaseCommand() {
         }
 
         // increase/decrease <name>
-        if (args.isEmpty()) {
-            player.send(config.)
-            return
-        }
+//        if (args.isEmpty()) {
+//            player.send(config.)
+//            return
+//        }
 
     }
 }

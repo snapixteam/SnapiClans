@@ -102,6 +102,10 @@ interface MessageConfig {
             @DefaultString("&cИгрок уже в клане")
             fun alreadyClan(): String
 
+            @ConfKey("already-invite")
+            @DefaultString("&cВы уже пригласили игрока")
+            fun alreadyInvite(): String
+
             @ConfKey("accept-or-decline")
             @DefaultString("&aНажмите, чтобы ответить на приглашение (clans accept player, clans decline player)")
             fun acceptOrDecline(): String
@@ -118,7 +122,11 @@ interface MessageConfig {
             @DefaultString("&cВы уже в клане")
             fun alreadyClan(): String
 
-            @ConfKey("error-inviter-not-in-clan")
+            @ConfKey("use")
+            @DefaultString("&fИспользуйте: /clans accept player")
+            fun use(): String
+
+            @ConfKey("error-sender-not-in-clan")
             @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете принять его приглашение")
             fun error(): String
 
@@ -128,9 +136,13 @@ interface MessageConfig {
         }
 
         @SubSection
-        fun decline(): AcceptCommand
+        fun decline(): DeclineCommand
         interface DeclineCommand {
-            @ConfKey("error-inviter-not-in-clan")
+            @ConfKey("use")
+            @DefaultString("&fИспользуйте: /clans accept player")
+            fun use(): String
+            
+            @ConfKey("error-sender-not-in-clan")
             @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете отказаться его приглашение")
             fun error(): String
 

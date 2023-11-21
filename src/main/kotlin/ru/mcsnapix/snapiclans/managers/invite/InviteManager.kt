@@ -53,7 +53,7 @@ object InviteManager {
         )
     }
 
-    private fun get(sender: String, receiver: String): DbRow {
+    fun get(sender: String, receiver: String): DbRow? {
         return DB.getFirstRow("SELECT * FROM `clan_invite` WHERE `sender` = ? AND `receiver` = ?", sender, receiver)
     }
 
@@ -63,7 +63,7 @@ object InviteManager {
 
         remove(sender, receiver.name)
 
-        if (clan == null || ClanCaches[clanInDatabase.getInt("clan_id")] != clan) {
+        if (clan == null || clanInDatabase == null || ClanCaches[clanInDatabase.getInt("clan_id")] != clan) {
             receiver.send(Settings.message.commands().accept().error())
             return
         }
@@ -87,7 +87,7 @@ object InviteManager {
 
         remove(sender, receiver.name)
 
-        if (clan == null || ClanCaches[clanInDatabase.getInt("clan_id")] != clan) {
+        if (clan == null || clanInDatabase == null || ClanCaches[clanInDatabase.getInt("clan_id")] != clan) {
             receiver.send(Settings.message.commands().decline().error())
             return
         }

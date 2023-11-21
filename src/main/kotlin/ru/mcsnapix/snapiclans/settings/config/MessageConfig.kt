@@ -98,12 +98,24 @@ interface MessageConfig {
             @DefaultString("&fИспользуйте: /clans invite player")
             fun use(): String
 
+            @ConfKey("cannot-self")
+            @DefaultString("&fВы не можете пригласить себя")
+            fun cannotSelf(): String
+
+            @ConfKey("not-exist-receiver")
+            @DefaultString("&fВы не можете пригласить игрока %name%, так как его не существует")
+            fun notExist(): String
+
+            @ConfKey("offline-receiver")
+            @DefaultString("&fВы не можете пригласить игрока %name%, так как он не в сети")
+            fun offline(): String
+
             @ConfKey("already-in-clan")
-            @DefaultString("&cИгрок уже в клане")
+            @DefaultString("&cИгрок %name% уже в клане")
             fun alreadyClan(): String
 
             @ConfKey("already-invite")
-            @DefaultString("&cВы уже пригласили игрока")
+            @DefaultString("&cВы уже пригласили игрока %name%")
             fun alreadyInvite(): String
 
             @ConfKey("accept-or-decline")
@@ -126,6 +138,10 @@ interface MessageConfig {
             @DefaultString("&fИспользуйте: /clans accept player")
             fun use(): String
 
+            @ConfKey("player-not-invite")
+            @DefaultString("&aИгрок %name% не приглашал вас в клан")
+            fun notInvite(): String
+
             @ConfKey("error-sender-not-in-clan")
             @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете принять его приглашение")
             fun error(): String
@@ -141,7 +157,11 @@ interface MessageConfig {
             @ConfKey("use")
             @DefaultString("&fИспользуйте: /clans accept player")
             fun use(): String
-            
+
+            @ConfKey("player-not-invite")
+            @DefaultString("&aИгрок %name% не приглашал вас в клан")
+            fun notInvite(): String
+
             @ConfKey("error-sender-not-in-clan")
             @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете отказаться его приглашение")
             fun error(): String

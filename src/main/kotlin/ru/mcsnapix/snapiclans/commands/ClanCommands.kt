@@ -13,6 +13,7 @@ import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.caching.actions.SendResultMessageAction
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
+import ru.mcsnapix.snapiclans.extensions.getLastLoginPlayer
 import ru.mcsnapix.snapiclans.extensions.hasMoney
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.extensions.withdrawMoney
@@ -136,16 +137,31 @@ class ClanCommands : BaseCommand() {
             player.send(config.use())
             return
         }
-        val receiver = args[0]
+
+        var receiver = args[0]
+        if (name == receiver) {
+            player.send(config.cannotSelf())
+            return
+        }
+        val lastLoginReceiver = getLastLoginPlayer(receiver)
+        if (lastLoginReceiver == null) {
+            player.send(config.notExist(), Placeholder("name", receiver))
+            return
+        }
+        receiver = lastLoginReceiver.name
+        if (!lastLoginReceiver.isOnline) {
+            player.send(config.offline(), Placeholder("name", receiver))
+            return
+        }
 
         val userReceiver = UserCaches[receiver]
         if (userReceiver != null) {
-            player.send(config.alreadyClan())
+            player.send(config.alreadyClan(), Placeholder("name", receiver))
             return
         }
 
         if (InviteManager.get(name, receiver) != null) {
-            player.send(config.alreadyInvite())
+            player.send(config.alreadyInvite(), Placeholder("name", receiver))
             return
         }
 
@@ -177,7 +193,13 @@ class ClanCommands : BaseCommand() {
             player.send(config.use())
             return
         }
-        val sender = args[0]
+        var sender = args[0]
+
+        if (InviteManager.get(name, sender) == null) {
+            player.send(config.notInvite(), Placeholder("name", sender))
+            return
+        }
+        sender = getLastLoginPlayer(sender)?.name ?: sender
 
         InviteManager.accept(sender, player)
     }
@@ -190,7 +212,13 @@ class ClanCommands : BaseCommand() {
             player.send(config.use())
             return
         }
-        val sender = args[0]
+        var sender = args[0]
+
+        if (InviteManager.get(name, sender) == null) {
+            player.send(config.notInvite(), Placeholder("name", sender))
+            return
+        }
+        sender = getLastLoginPlayer(sender)?.name ?: sender
 
         InviteManager.decline(sender, player)
     }

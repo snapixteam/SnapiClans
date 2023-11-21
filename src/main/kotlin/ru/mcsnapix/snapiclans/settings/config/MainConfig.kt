@@ -74,7 +74,7 @@ interface MainConfig {
 
             @JvmStatic
             @Suppress("unused")
-            fun ownerRoleDefault() = ClanRole("owner", "Владелец", 10, ClanPermission.values().toSet())
+            fun ownerRoleDefault() = ClanRole("owner", "Владелец", 3, ClanPermission.values().toSet())
 
             @JvmStatic
             @Suppress("unused")

@@ -87,6 +87,26 @@ interface MessageConfig {
         }
 
         @SubSection
+        fun accept(): AcceptCommand
+        interface AcceptCommand {
+            @ConfKey("already-in-clan")
+            @DefaultString("&cВы уже в клане")
+            fun alreadyClan(): String
+
+            @ConfKey("error-inviter-not-in-clan")
+            @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете принять его приглашение")
+            fun error(): String
+
+            @ConfKey("success")
+            @DefaultString("&aВы вступили в клан %name%")
+            fun success(): String
+        }
+
+        @ConfKey("ignore")
+        @DefaultString("Игрок %receiver_name% проигнорировал ваше приглашение в клан %clan_name%")
+        fun ignore(): String
+
+        @SubSection
         fun chat(): ChatCommand
         interface ChatCommand {
             @ConfKey("no-clan")

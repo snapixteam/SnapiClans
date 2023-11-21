@@ -1,15 +1,15 @@
-package ru.mcsnapix.snapiclans.extensions
+package ru.mcsnapix.snapiclans.utils
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
-val Location.string: String
-    get() = "${this.x};${this.y};${this.z};${this.world.name};${this.yaw};${this.pitch}"
+object LocationSerializer {
+    fun serialize(location: Location) =
+        "${location.x};${location.y};${location.z};${location.world.name};${location.yaw};${location.pitch}"
 
-val String.location: Location?
-    get() {
-        val parts = this.split(";".toRegex())
-        if (parts.isEmpty()) {
+    fun deserialize(string: String): Location? {
+        val parts = string.split(";".toRegex())
+        if (parts.size != 6) {
             return null
         }
         val x = parts[0].toDouble()
@@ -20,3 +20,4 @@ val String.location: Location?
         val pitch = parts[5].toFloat()
         return Location(world, x, y, z, yaw, pitch)
     }
+}

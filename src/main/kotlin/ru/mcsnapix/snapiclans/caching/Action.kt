@@ -1,5 +1,6 @@
 package ru.mcsnapix.snapiclans.caching
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.util.*
@@ -37,6 +38,12 @@ abstract class Action(val id: UUID) {
             val element = content.asJsonObject[name]
                 ?: throw IllegalStateException("Incoming message has no name argument: $content")
             return element.asLong
+        }
+
+        fun elementAsJsonArray(name: String, content: JsonElement): JsonArray {
+            val element = content.asJsonObject[name]
+                ?: throw IllegalStateException("Incoming message has no name argument: $content")
+            return element.asJsonArray
         }
 
         fun elementAsInt(name: String, content: JsonElement): Int {

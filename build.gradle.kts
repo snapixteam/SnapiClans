@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ru.mcsnapix.${project.name.toLowerCase()}"
-version = "0.0.3"
+version = "0.0.4"
 
 repositories {
     mavenCentral()

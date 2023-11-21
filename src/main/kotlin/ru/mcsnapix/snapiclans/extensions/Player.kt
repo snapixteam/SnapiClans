@@ -13,7 +13,6 @@ fun Player.send(message: String) {
         return
     }
     result = ChatColor.translateAlternateColorCodes('&', message)
-    result = parsePlayer(result, this)
 
     if (result.contains("<mm>")) {
         result = result.replace("<mm>", "")

@@ -5,14 +5,18 @@ import co.aikar.commands.annotation.*
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import ru.mcsnapix.snapiclans.Placeholder
 import ru.mcsnapix.snapiclans.SnapiClans
 import ru.mcsnapix.snapiclans.api.ClanAPI
 import ru.mcsnapix.snapiclans.api.clans.ClanPermission
+import ru.mcsnapix.snapiclans.caching.Messenger
+import ru.mcsnapix.snapiclans.caching.actions.SendResultMessageAction
 import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
 import ru.mcsnapix.snapiclans.caching.cache.UserCaches
 import ru.mcsnapix.snapiclans.extensions.hasMoney
 import ru.mcsnapix.snapiclans.extensions.send
 import ru.mcsnapix.snapiclans.extensions.withdrawMoney
+import ru.mcsnapix.snapiclans.managers.invite.InviteManager
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.util.*
 
@@ -45,17 +49,17 @@ class ClanCommands : BaseCommand() {
 
     @Subcommand("%clanscommandcreate")
     fun createClan(player: Player, args: Array<String>) {
+        val config = message.commands().createClan()
         val owner = player.name
-        val create = message.commands().createClan()
-        val regex = config.regex()
+        val regex = this.config.regex()
 
         if (UserCaches[owner] != null) {
-            player.send(create.alreadyInClan())
+            player.send(config.alreadyInClan())
             return
         }
 
         if (args.isEmpty() || args.size > 2) {
-            player.send(create.use())
+            player.send(config.use())
             return
         }
 
@@ -63,53 +67,92 @@ class ClanCommands : BaseCommand() {
         val displayName = if (args.size == 1) name else args[1]
 
         if (!regex.clanName().toRegex().matches(name)) {
-            player.send(create.clanNameInvalid())
+            player.send(config.clanNameInvalid())
             return
         }
         if (!regex.clanDisplayName().toRegex().matches(displayName)) {
-            player.send(create.clanDisplayNameInvalid())
+            player.send(config.clanDisplayNameInvalid())
             return
         }
         if (ClanCaches[name] != null) {
-            player.send(create.clanAlreadyCreate())
+            player.send(config.clanAlreadyCreate())
             return
         }
 
-        val price = config.economy().createClan()
+        val price = this.config.economy().createClan()
 
         if (!player.hasMoney(price)) {
-            player.send(create.noMoney())
+            player.send(config.noMoney())
             return
         }
 
         player.withdrawMoney(price)
 
         ClanAPI.createClan(name, displayName, owner)
-        player.send(create.success())
+        player.send(config.success())
     }
 
     @Subcommand("%clanscommandremove")
     fun removeClan(player: Player, args: Array<String>) {
-        val remove = message.commands().removeClan()
+        val config = message.commands().removeClan()
         val user = UserCaches[player.name]
 
         if (user == null) {
-            player.send(remove.noClan())
+            player.send(config.noClan())
             return
         }
 
         if (!user.role.permissions.contains(ClanPermission.DISBAND)) {
-            player.send(remove.noPermission())
+            player.send(config.noPermission())
             return
         }
 
         if (args.size == 1 && args[0].lowercase() == "accept") {
             ClanAPI.removeClan(user.clan)
-            player.send(remove.success())
+            player.send(config.success())
             return
         }
 
-        player.send(remove.accept())
+        player.send(config.accept())
+    }
+
+    @Subcommand("%clanscommandinvite")
+    fun invite(player: Player, args: Array<String>) {
+        val config = message.commands().invite()
+        val user = UserCaches[player.name]
+
+        if (user == null) {
+            player.send(config.noClan())
+            return
+        }
+
+        if (!user.role.permissions.contains(ClanPermission.INVITE)) {
+            player.send(config.noPermission())
+            return
+        }
+
+        if (args.isEmpty()) {
+            player.send(config.use())
+            return
+        }
+
+        val userReceiver = UserCaches[args[0]]
+        if (userReceiver != null) {
+            player.send(config.alreadyClan())
+            return
+        }
+
+        InviteManager.add(user.clan, user.name, args[0])
+        player.send(config.success())
+        Messenger.sendOutgoingMessage(
+            SendResultMessageAction(
+                UUID.randomUUID(),
+                args[0],
+                config.acceptOrDecline(),
+                Placeholder("sender", user.name),
+                Placeholder("clan", user.clan.name)
+            )
+        )
     }
 
     @Subcommand("%clanscommandchat")
@@ -137,22 +180,22 @@ class ClanCommands : BaseCommand() {
 
     @Subcommand("%clanscommandrole")
     fun role(player: Player, args: Array<String>) {
-        val role = message.commands().role()
+        val config = message.commands().role()
         val user = UserCaches[player.name]
 
         if (user == null) {
-            player.send(role.noClan())
+            player.send(config.noClan())
             return
         }
 
         if (!user.role.permissions.contains(ClanPermission.SET_ROLE)) {
-            player.send(role.noPermission())
+            player.send(config.noPermission())
             return
         }
 
         // increase/decrease <name>
-        if (args.size < 1) {
-            player.send(role.)
+        if (args.isEmpty()) {
+            player.send(config.)
             return
         }
 

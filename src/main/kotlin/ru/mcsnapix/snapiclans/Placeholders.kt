@@ -2,7 +2,6 @@ package ru.mcsnapix.snapiclans
 
 class Placeholder<out V>(val key: String, val value: V) {
     fun parse(string: String) = string.replace("%$key%", value.toString())
-    fun serialize() = PlaceholderSerializer.serialize(this)
 }
 
 object PlaceholderSerializer {

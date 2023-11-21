@@ -117,10 +117,11 @@ object ClanAPI {
      */
     @JvmStatic
     fun removeUser(name: String) {
+        val user = UserCaches[name] ?: return
         UserDatabase.remove(name)
         InviteManager.remove(name)
         Messenger.sendOutgoingMessage(CreateUserAction(UUID.randomUUID(), name))
-        Messenger.sendOutgoingMessage(UpdateClanAction(UUID.randomUUID(), clan.name))
+        Messenger.sendOutgoingMessage(UpdateClanAction(UUID.randomUUID(), user.clan.name))
     }
 
     @JvmStatic

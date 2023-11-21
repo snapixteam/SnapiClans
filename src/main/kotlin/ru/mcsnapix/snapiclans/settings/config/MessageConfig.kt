@@ -6,6 +6,23 @@ import space.arim.dazzleconf.annote.ConfKey
 import space.arim.dazzleconf.annote.SubSection
 
 interface MessageConfig {
+    @ConfKey("response-invite")
+    @SubSection
+    fun responseInvite(): ResponseInvite
+    interface ResponseInvite {
+        @ConfKey("accept")
+        @DefaultString("Игрок %receiver% принял ваше приглашение в клан %clan%")
+        fun accept(): String
+
+        @ConfKey("decline")
+        @DefaultString("Игрок %receiver% отказался от вашего приглашения в клан %clan%")
+        fun decline(): String
+
+        @ConfKey("ignore")
+        @DefaultString("Игрок %receiver% проигнорировал ваше приглашение в клан %clan%")
+        fun ignore(): String
+    }
+
     @SubSection
     fun commands(): Commands
     interface Commands {
@@ -77,8 +94,16 @@ interface MessageConfig {
             @DefaultString("&cУ вас нет разрешения, чтобы отправлять приглашение")
             fun noPermission(): String
 
+            @ConfKey("use")
+            @DefaultString("&fИспользуйте: /clans invite player")
+            fun use(): String
+
+            @ConfKey("already-in-clan")
+            @DefaultString("&cИгрок уже в клане")
+            fun alreadyClan(): String
+
             @ConfKey("accept-or-decline")
-            @DefaultString("&aНажмите, чтобы потвердить пригласить (clans accept player, clans decline player)")
+            @DefaultString("&aНажмите, чтобы ответить на приглашение (clans accept player, clans decline player)")
             fun acceptOrDecline(): String
 
             @ConfKey("success")
@@ -102,9 +127,17 @@ interface MessageConfig {
             fun success(): String
         }
 
-        @ConfKey("ignore")
-        @DefaultString("Игрок %receiver_name% проигнорировал ваше приглашение в клан %clan_name%")
-        fun ignore(): String
+        @SubSection
+        fun decline(): AcceptCommand
+        interface DeclineCommand {
+            @ConfKey("error-inviter-not-in-clan")
+            @DefaultString("&aИгрок, который вас пригласил, вышел из клана, поэтому вы не можете отказаться его приглашение")
+            fun error(): String
+
+            @ConfKey("success")
+            @DefaultString("&aВы вступили в клан %name%")
+            fun success(): String
+        }
 
         @SubSection
         fun chat(): ChatCommand

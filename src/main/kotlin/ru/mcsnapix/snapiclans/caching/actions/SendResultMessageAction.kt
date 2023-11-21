@@ -5,22 +5,32 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import org.bukkit.Bukkit
+import ru.mcsnapix.snapiclans.Placeholder
+import ru.mcsnapix.snapiclans.PlaceholderSerializer
 import ru.mcsnapix.snapiclans.caching.Action
 import ru.mcsnapix.snapiclans.caching.ActionType
-import ru.mcsnapix.snapiclans.Placeholder
-import ru.mcsnapix.snapiclans.PlaceholderManager
-import ru.mcsnapix.snapiclans.PlaceholderSerializer
 import ru.mcsnapix.snapiclans.caching.Messenger
 import ru.mcsnapix.snapiclans.extensions.send
 import java.util.*
 
-class SendResultMessageAction(id: UUID, val receiver: String, val message: String, val placeholders: List<Placeholder<String>>) : Action(id) {
+class SendResultMessageAction(
+    id: UUID,
+    val receiver: String,
+    val message: String,
+    val placeholders: List<Placeholder<String>>
+) : Action(id) {
+    constructor(id: UUID, receiver: String, message: String, vararg placeholders: Placeholder<String>) : this(
+        id,
+        receiver,
+        message,
+        placeholders.toList()
+    )
+
     override val type: ActionType = ActionType.SEND_RESULT_MESSAGE
 
     override fun executeIncomingMessage() {
         val player = Bukkit.getPlayer(receiver) ?: return
-        val message = PlaceholderManager.parse(message, placeholders)
-        player.send(message)
+        player.send(message, placeholders)
     }
 
     override fun encode(): String {
@@ -31,7 +41,7 @@ class SendResultMessageAction(id: UUID, val receiver: String, val message: Strin
 
         val jsonArray = JsonArray()
         for (placeholder in placeholders) {
-            jsonArray.add(placeholder.serialize())
+            jsonArray.add(PlaceholderSerializer.serialize(placeholder))
         }
         jsonObject.add("placeholders", jsonArray)
 
@@ -46,7 +56,7 @@ class SendResultMessageAction(id: UUID, val receiver: String, val message: Strin
             val message = elementAsString("message", content)
             val placeholders = mutableListOf<Placeholder<String>>()
 
-            elementAsJsonArray("placeholders", content).forEach {p ->
+            elementAsJsonArray("placeholders", content).forEach { p ->
                 PlaceholderSerializer.deserialize(p.asString)?.let {
                     placeholders.add(it)
                 }

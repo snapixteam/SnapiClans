@@ -146,8 +146,7 @@ class ClanCommands : BaseCommand() {
             return
         }
         receiver = lastLoginReceiver.name
-        val luckPermsReceiver = getLuckPermsUser(receiver)
-        if (luckPermsReceiver == null || !luckPermsReceiver.isOnline()) {
+        if (lastLoginReceiver.isOffline()) {
             player.send(config.offline(), Placeholder("name", receiver))
             return
         }

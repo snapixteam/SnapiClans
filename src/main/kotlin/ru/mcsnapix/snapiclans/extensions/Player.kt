@@ -42,15 +42,16 @@ fun <V> Player.send(message: String, vararg placeholder: Placeholder<V>) {
 }
 
 fun getLastLoginPlayer(name: String): LastLoginPlayer? {
-    val set = lastLoginApi.getPlayerByName(name)
-    if (set.isEmpty()) {
-        return null
-    }
-    return set.first()
+    return lastLoginApi.getPlayerByName(name).firstOrNull()
 }
 
 fun getLuckPermsUser(name: String): User? {
     return luckPerms.userManager.getUser(name)
+}
+
+fun LastLoginPlayer.isOffline(): Boolean {
+    val user = getLuckPermsUser(name) ?: return true
+    return !user.isOnline()
 }
 
 fun User.isOnline() = luckPerms.userManager.loadedUsers.contains(this)

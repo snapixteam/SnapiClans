@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ru.mcsnapix.${project.name.toLowerCase()}"
-version = "0.0.4"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
@@ -26,8 +26,12 @@ dependencies {
     compileOnly("com.alessiodp.lastloginapi:lastloginapi-api:1.7.2")
     compileOnly("net.luckperms:api:5.4")
 
+    implementation("org.jetbrains.exposed:exposed-core:0.44.1")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:0.44.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.44.1")
     implementation("co.aikar:idb-core:1.0.0-SNAPSHOT")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("net.kyori:adventure-text-minimessage:4.14.0")
     implementation("net.kyori:adventure-platform-bukkit:4.3.1")
     implementation("space.arim.dazzleconf:dazzleconf-ext-snakeyaml:1.2.1")
@@ -80,5 +84,5 @@ tasks {
 bukkit {
     main = "${project.group}.${project.name}"
     authors = listOf("SnapiX")
-    depend = listOf("Vault", "LastLoginAPI")
+    depend = listOf("Vault", "LastLoginAPI", "LuckPerms")
 }

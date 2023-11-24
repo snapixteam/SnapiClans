@@ -17,7 +17,6 @@ import java.nio.file.Path
 
 class Configuration<C> private constructor(private val logger: Logger, configHelper: ConfigurationHelper<C>) {
     private val configHelper: ConfigurationHelper<C>
-
     private var configData: C? = null
 
     init {

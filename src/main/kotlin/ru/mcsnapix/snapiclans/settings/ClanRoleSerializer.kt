@@ -1,7 +1,7 @@
-package ru.mcsnapix.snapiclans.settings.serializers
+package ru.mcsnapix.snapiclans.settings
 
-import ru.mcsnapix.snapiclans.api.clans.ClanPermission
-import ru.mcsnapix.snapiclans.api.clans.ClanRole
+import ru.mcsnapix.snapiclans.api.roles.ClanPermission
+import ru.mcsnapix.snapiclans.api.roles.ClanRole
 import space.arim.dazzleconf.serialiser.Decomposer
 import space.arim.dazzleconf.serialiser.FlexibleType
 import space.arim.dazzleconf.serialiser.ValueSerialiser

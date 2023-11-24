@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.extensions
+package ru.mcsnapix.snapiclans
 
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player

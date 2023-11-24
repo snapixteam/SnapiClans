@@ -3,7 +3,6 @@ package ru.mcsnapix.snapiclans.settings
 import ru.mcsnapix.snapiclans.settings.config.DatabaseConfig
 import ru.mcsnapix.snapiclans.settings.config.MainConfig
 import ru.mcsnapix.snapiclans.settings.config.MessageConfig
-import ru.mcsnapix.snapiclans.settings.serializers.ClanRoleSerializer
 import space.arim.dazzleconf.ConfigurationOptions
 
 object Settings {

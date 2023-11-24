@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.extensions
+package ru.mcsnapix.snapiclans
 
 import com.alessiodp.lastloginapi.api.LastLogin
 import com.alessiodp.lastloginapi.api.interfaces.LastLoginAPI
@@ -8,9 +8,6 @@ import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.model.user.User
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.entity.Player
-import ru.mcsnapix.snapiclans.Placeholder
-import ru.mcsnapix.snapiclans.PlaceholderManager
-import ru.mcsnapix.snapiclans.SnapiClans
 
 
 val mm = MiniMessage.miniMessage()

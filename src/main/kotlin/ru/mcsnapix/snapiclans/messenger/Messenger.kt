@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.caching
+package ru.mcsnapix.snapiclans.messenger
 
 import co.aikar.idb.DB
 import com.google.gson.*
@@ -13,11 +13,11 @@ import kotlin.math.max
 object Messenger {
     private val scheduler = Bukkit.getScheduler()
     private val lock: ReadWriteLock = ReentrantReadWriteLock()
+    private val gson: Gson = GsonBuilder().disableHtmlEscaping().create()
     private var lastId: Int = -1
     private var closed = false
     private var pollTask: BukkitTask? = null
     private var housekeepingTask: BukkitTask? = null
-    private val gson: Gson = GsonBuilder().disableHtmlEscaping().create()
 
     fun enable() {
         DB.getFirstColumn<Int>("SELECT MAX(`id`) as `latest` FROM `clan_messenger`")?.let {
@@ -56,9 +56,9 @@ object Messenger {
         DB.getFirstRow(
             "SELECT `id`, `msg` FROM `clan_messenger` WHERE `id` > ? AND (NOW() - `time` < 30)",
             lastId
-        )?.let {
-            lastId = max(lastId, it.getInt("id"))
-            val message: String = it.getString("msg")
+        )?.apply {
+            lastId = max(lastId, getInt("id"))
+            val message: String = getString("msg")
 
             val parsed: JsonObject = gson.fromJson(message, JsonObject::class.java)
             val json = parsed.asJsonObject

@@ -1,7 +1,7 @@
 package ru.mcsnapix.snapiclans.settings.config
 
-import ru.mcsnapix.snapiclans.api.clans.ClanPermission
-import ru.mcsnapix.snapiclans.api.clans.ClanRole
+import ru.mcsnapix.snapiclans.api.roles.ClanPermission
+import ru.mcsnapix.snapiclans.api.roles.ClanRole
 import space.arim.dazzleconf.annote.ConfDefault.*
 import space.arim.dazzleconf.annote.ConfKey
 import space.arim.dazzleconf.annote.SubSection

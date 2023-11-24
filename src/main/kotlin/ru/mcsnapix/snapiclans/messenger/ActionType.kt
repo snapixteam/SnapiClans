@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.caching
+package ru.mcsnapix.snapiclans.messenger
 
 import com.google.gson.JsonElement
 import ru.mcsnapix.snapiclans.caching.actions.*
@@ -35,14 +35,14 @@ enum class ActionType {
             return UpdateUserAction.decode(content, id)
         }
     },
+    SEND_CHAT_MESSAGE {
+        override fun decode(content: JsonElement, id: UUID): Action {
+            return SendChatMessageAction.decode(content, id)
+        }
+    },
     SEND_MESSAGE {
         override fun decode(content: JsonElement, id: UUID): Action {
             return SendMessageAction.decode(content, id)
-        }
-    },
-    SEND_RESULT_MESSAGE {
-        override fun decode(content: JsonElement, id: UUID): Action {
-            return SendResultMessageAction.decode(content, id)
         }
     },
     RESPONSE_INVITE {

@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import ru.mcsnapix.snapiclans.api.ClanAPI
-import ru.mcsnapix.snapiclans.api.events.SendMessageEvent
+import ru.mcsnapix.snapiclans.api.events.SendChatMessageEvent
 import ru.mcsnapix.snapiclans.caching.Action
 import ru.mcsnapix.snapiclans.caching.ActionType
 import ru.mcsnapix.snapiclans.caching.Messenger
@@ -24,7 +24,7 @@ class SendMessageAction(id: UUID, val sender: String, val clan: String, val mess
             val message = message
 
             UserCaches[sender]?.let { user ->
-                ClanAPI.callEvent(SendMessageEvent(it, user, message))
+                ClanAPI.callEvent(SendChatMessageEvent(it, user, message))
             }
 
             it.members.forEach { user ->

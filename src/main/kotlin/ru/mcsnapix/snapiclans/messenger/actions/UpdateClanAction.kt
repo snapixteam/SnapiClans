@@ -3,21 +3,29 @@ package ru.mcsnapix.snapiclans.caching.actions
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import ru.mcsnapix.snapiclans.caching.Action
-import ru.mcsnapix.snapiclans.caching.ActionType
-import ru.mcsnapix.snapiclans.caching.Messenger
-import ru.mcsnapix.snapiclans.caching.cache.ClanCaches
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import ru.mcsnapix.snapiclans.database.ClanCache
+import ru.mcsnapix.snapiclans.database.ClanService
+import ru.mcsnapix.snapiclans.messenger.Action
+import ru.mcsnapix.snapiclans.messenger.ActionType
+import ru.mcsnapix.snapiclans.messenger.Messenger
 import java.util.*
 
 /**
  * @author Flaimer
  * @since 0.0.3
  */
-class UpdateClanAction(id: UUID, val name: String) : Action(id) {
-    override val type: ActionType = ActionType.UPDATE_CLAN
-
+class UpdateClanAction(id: UUID, val name: String) : Action(id, ActionType.UPDATE_CLAN) {
     override fun executeIncomingMessage() {
-        ClanCaches.refresh(name)
+        runBlocking {
+            val result = async {
+                ClanService.read(name)?.let {
+                    ClanCache.reload(it)
+                }
+            }
+            result.await()
+        }
     }
 
     override fun encode(): String {

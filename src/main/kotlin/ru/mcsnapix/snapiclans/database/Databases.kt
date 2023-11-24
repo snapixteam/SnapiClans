@@ -5,8 +5,6 @@ import co.aikar.idb.DatabaseOptions
 import co.aikar.idb.PooledDatabaseOptions
 import org.intellij.lang.annotations.Language
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import ru.mcsnapix.snapiclans.settings.Settings
 
 object Databases {
@@ -23,8 +21,10 @@ object Databases {
         )
 
         // TODO: Перейти полностью на exposed
-        val db = PooledDatabaseOptions.builder().options(DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
-            .build()).createHikariDatabase()
+        val db = PooledDatabaseOptions.builder().options(
+            DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
+                .build()
+        ).createHikariDatabase()
         DB.setGlobalDatabase(db)
         db.executeUpdate(CREATE_TABLE_INVITE)
         db.executeUpdate(CREATE_TABLE_MESSENGER)

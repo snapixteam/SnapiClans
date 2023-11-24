@@ -88,6 +88,11 @@ class SnapiClans : JavaPlugin() {
         sendConsoleMessage("")
     }
 
+    fun adventure(): BukkitAudiences {
+        checkNotNull(adventure) { "Tried to access Adventure when the plugin was disabled!" }
+        return adventure as BukkitAudiences
+    }
+
     @OptIn(ExperimentalContracts::class)
     inline fun <T : Any> checkNotNull(value: T?, lazyMessage: () -> Any): T {
         contract {
@@ -102,4 +107,8 @@ class SnapiClans : JavaPlugin() {
             return value
         }
     }
+}
+
+fun callEvent(event: Event) {
+    Bukkit.getServer().pluginManager.callEvent(event)
 }

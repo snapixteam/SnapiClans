@@ -1,7 +1,7 @@
 package ru.mcsnapix.snapiclans.messenger
 
 import com.google.gson.JsonElement
-import ru.mcsnapix.snapiclans.caching.actions.*
+import ru.mcsnapix.snapiclans.messenger.actions.*
 import java.util.*
 
 enum class ActionType {

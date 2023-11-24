@@ -1,5 +1,11 @@
 package ru.mcsnapix.snapiclans.api
 
-data class User(val id: Int, val name: String, val displayName: String, val owner: String) {
-    constructor(id: Int, exposedClan: ExposedClan) : this(id, exposedClan.name, exposedClan.displayName, exposedClan.owner)
+import ru.mcsnapix.snapiclans.database.ExposedUser
+
+data class User(val clanId: Int, val name: String, val role: String) {
+    constructor(exposedUser: ExposedUser) : this(
+        exposedUser.clanId,
+        exposedUser.name,
+        exposedUser.role
+    )
 }

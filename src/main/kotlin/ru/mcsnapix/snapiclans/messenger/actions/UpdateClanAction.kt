@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.caching.actions
+package ru.mcsnapix.snapiclans.messenger.actions
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject

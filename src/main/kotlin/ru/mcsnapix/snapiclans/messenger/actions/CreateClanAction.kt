@@ -5,7 +5,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import org.bukkit.Bukkit
 import ru.mcsnapix.snapiclans.api.events.CreateClanEvent
 import ru.mcsnapix.snapiclans.callEvent
 import ru.mcsnapix.snapiclans.database.ClanCache

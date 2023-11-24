@@ -1,11 +1,10 @@
-package ru.mcsnapix.snapiclans.caching.actions
+package ru.mcsnapix.snapiclans.messenger.actions
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import ru.mcsnapix.snapiclans.api.events.CreateClanEvent
 import ru.mcsnapix.snapiclans.api.events.RemoveClanEvent
 import ru.mcsnapix.snapiclans.callEvent
 import ru.mcsnapix.snapiclans.database.ClanCache
@@ -24,7 +23,7 @@ class RemoveClanAction(id: UUID, val name: String) : Action(id, ActionType.REMOV
         runBlocking {
             val result = async {
                 ClanService.read(name)?.let {
-                    ClanService.delete(it.id)
+                    ClanService.delete(it.name)
                     ClanCache.remove(it)
                     callEvent(RemoveClanEvent(it))
                 }

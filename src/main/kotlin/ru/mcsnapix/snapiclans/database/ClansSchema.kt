@@ -1,13 +1,16 @@
 package ru.mcsnapix.snapiclans.database
 
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.mcsnapix.snapiclans.api.Clan
+import ru.mcsnapix.snapiclans.messenger.Messenger
+import ru.mcsnapix.snapiclans.messenger.actions.CreateClanAction
+import ru.mcsnapix.snapiclans.messenger.actions.RemoveClanAction
+import ru.mcsnapix.snapiclans.messenger.actions.UpdateClanAction
+import java.util.*
 
 data class ExposedClan(val name: String, val displayName: String, val owner: String)
 object ClanCache {
@@ -33,13 +36,15 @@ object ClanCache {
         clans.remove(clan)
     }
 }
+
 object ClanService {
-    private object Clans : Table() {
+    object Clans : Table() {
         val id = integer("id").autoIncrement()
         val name = varchar("name", length = 50).uniqueIndex()
         val displayName = varchar("display_name", length = 50)
         val owner = varchar("display_name", length = 50)
 
+        override val tableName = "clan_clans"
         override val primaryKey = PrimaryKey(id)
     }
 
@@ -49,16 +54,17 @@ object ClanService {
         }
     }
 
-    suspend fun create(clan: ExposedClan): Int {
+    suspend fun create(exposedClan: ExposedClan): Int {
         val id = dbQuery {
             Clans.insert {
-                it[name] = clan.name
-                it[displayName] = clan.displayName
-                it[owner] = clan.owner
+                it[name] = exposedClan.name
+                it[displayName] = exposedClan.displayName
+                it[owner] = exposedClan.owner
             }[Clans.id]
         }
 
-        ClanCache.add(Clan(id, clan))
+        val clan = Clan(id, exposedClan)
+        Messenger.sendOutgoingMessage(CreateClanAction(UUID.randomUUID(), clan.name))
 
         return id
     }
@@ -93,18 +99,16 @@ object ClanService {
                 it[owner] = clan.owner
             }
         }
-    }
 
-    suspend fun delete(id: Int) {
-        dbQuery {
-            Clans.deleteWhere { Clans.id.eq(id) }
-        }
+        Messenger.sendOutgoingMessage(UpdateClanAction(UUID.randomUUID(), clan.name))
     }
 
     suspend fun delete(name: String) {
         dbQuery {
             Clans.deleteWhere { Clans.name.eq(name) }
         }
+
+        Messenger.sendOutgoingMessage(RemoveClanAction(UUID.randomUUID(), name))
     }
 
     private suspend fun <T> dbQuery(block: suspend () -> T): T =

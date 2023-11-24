@@ -1,4 +1,3 @@
 package ru.mcsnapix.snapiclans.api
 
-object ClansAPI {
-}
+object ClansAPI

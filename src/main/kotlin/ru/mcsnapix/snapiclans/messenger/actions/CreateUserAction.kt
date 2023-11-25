@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import ru.mcsnapix.snapiclans.api.events.CreateUserEvent
 import ru.mcsnapix.snapiclans.callEvent
 import ru.mcsnapix.snapiclans.database.UserCache
-import ru.mcsnapix.snapiclans.database.UserService
 import ru.mcsnapix.snapiclans.messenger.Action
 import ru.mcsnapix.snapiclans.messenger.ActionType
 import ru.mcsnapix.snapiclans.messenger.Messenger.encodeMessage
@@ -22,7 +21,7 @@ class CreateUserAction(id: UUID, val name: String) : Action(id, ActionType.CREAT
     override fun executeIncomingMessage() {
         runBlocking {
             val result = async {
-                UserService.read(name)?.let {
+                UserCache.get { it.name == name }?.let {
                     UserCache.add(it)
                     callEvent(CreateUserEvent(it))
                 }

@@ -7,10 +7,10 @@ import com.google.gson.JsonPrimitive
 import org.bukkit.Bukkit
 import ru.mcsnapix.snapiclans.Placeholder
 import ru.mcsnapix.snapiclans.PlaceholderSerializer
-import ru.mcsnapix.snapiclans.caching.Action
-import ru.mcsnapix.snapiclans.caching.ActionType
-import ru.mcsnapix.snapiclans.caching.Messenger
-import ru.mcsnapix.snapiclans.extensions.send
+import ru.mcsnapix.snapiclans.messenger.Action
+import ru.mcsnapix.snapiclans.messenger.ActionType
+import ru.mcsnapix.snapiclans.messenger.Messenger.encodeMessage
+import ru.mcsnapix.snapiclans.send
 import java.util.*
 
 class SendMessageAction(
@@ -18,15 +18,13 @@ class SendMessageAction(
     val receiver: String,
     val message: String,
     val placeholders: List<Placeholder<String>>
-) : Action(id) {
+) : Action(id, ActionType.SEND_MESSAGE) {
     constructor(id: UUID, receiver: String, message: String, vararg placeholders: Placeholder<String>) : this(
         id,
         receiver,
         message,
         placeholders.toList()
     )
-
-    override val type: ActionType = ActionType.SEND_RESULT_MESSAGE
 
     override fun executeIncomingMessage() {
         val player = Bukkit.getPlayer(receiver) ?: return
@@ -45,7 +43,7 @@ class SendMessageAction(
         }
         jsonObject.add("placeholders", jsonArray)
 
-        return Messenger.encodeMessage(type, id, jsonObject)
+        return encodeMessage(type, id, jsonObject)
     }
 
     companion object {

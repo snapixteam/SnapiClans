@@ -5,6 +5,10 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.plugin.java.JavaPlugin
+import ru.mcsnapix.snapiclans.database.Databases
+import ru.mcsnapix.snapiclans.managers.Manager
+import ru.mcsnapix.snapiclans.messenger.Messenger
+import ru.mcsnapix.snapiclans.settings.Settings
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -30,10 +34,14 @@ class SnapiClans : JavaPlugin() {
         sendLogoWithMessage(
             "",
             "§fSnapi§4Clans §8(v0.1.0)",
-            "§8Made by §0SnapiX Team",
+            "§8Made by §oSnapiX Team",
             ""
         )
         setupHook()
+        Settings.enable()
+        Databases.enable()
+        Manager.enable()
+        Messenger.enable()
     }
 
     fun reload() {
@@ -43,6 +51,7 @@ class SnapiClans : JavaPlugin() {
             "§8Reload plugin",
             ""
         )
+        Settings.reload()
     }
 
     fun disable() {
@@ -52,6 +61,9 @@ class SnapiClans : JavaPlugin() {
             "§8Disable plugin",
             ""
         )
+        Messenger.disable()
+        Manager.disable()
+        Databases.disable()
     }
 
 

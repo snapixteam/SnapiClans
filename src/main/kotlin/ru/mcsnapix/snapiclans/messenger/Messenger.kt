@@ -1,10 +1,11 @@
 package ru.mcsnapix.snapiclans.messenger
 
-import co.aikar.idb.DB
 import com.google.gson.*
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 import ru.mcsnapix.snapiclans.SnapiClans
+import ru.mcsnapix.snapiclans.database.executeQuery
+import ru.mcsnapix.snapiclans.database.executeUpdate
 import java.util.*
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -20,8 +21,8 @@ object Messenger {
     private var housekeepingTask: BukkitTask? = null
 
     fun enable() {
-        DB.getFirstColumn<Int>("SELECT MAX(`id`) as `latest` FROM `clan_messenger`")?.let {
-            lastId = it
+        executeQuery("SELECT MAX(`id`) as `latest` FROM `clan_messenger`") {
+            lastId = it.getInt(1)
         }
         pollTask = scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { pollMessages() }, 0L, 20L)
         housekeepingTask =
@@ -39,10 +40,7 @@ object Messenger {
             return
         }
 
-        DB.executeUpdate(
-            "INSERT INTO `clan_messenger` (`time`, `msg`) VALUES(NOW(), ?)",
-            action.encode()
-        )
+        executeUpdate("INSERT INTO `clan_messenger` (`time`, `msg`) VALUES(NOW(), '${action.encode()}')")
         lock.readLock().unlock()
     }
 
@@ -53,12 +51,9 @@ object Messenger {
             return
         }
 
-        DB.getFirstRow(
-            "SELECT `id`, `msg` FROM `clan_messenger` WHERE `id` > ? AND (NOW() - `time` < 30)",
-            lastId
-        )?.apply {
-            lastId = max(lastId, getInt("id"))
-            val message: String = getString("msg")
+        executeQuery("SELECT `id`, `msg` FROM `clan_messenger` WHERE `id` > '$lastId' AND (NOW() - `time` < 30)") {
+            lastId = max(lastId, it.getInt("id"))
+            val message: String = it.getString("msg")
 
             val parsed: JsonObject = gson.fromJson(message, JsonObject::class.java)
             val json = parsed.asJsonObject
@@ -87,7 +82,7 @@ object Messenger {
             return
         }
 
-        DB.executeUpdate("DELETE FROM `clan_messenger` WHERE (NOW() - `time` > 60)")
+        executeUpdate("DELETE FROM `clan_messenger` WHERE (NOW() - `time` > 60)")
         lock.readLock().unlock()
     }
 

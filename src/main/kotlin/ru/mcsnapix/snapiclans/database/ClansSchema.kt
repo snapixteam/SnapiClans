@@ -25,6 +25,14 @@ object ClanCache {
         return null
     }
 
+    fun getAll(predicate: (Clan) -> Boolean): List<Clan> {
+        val result = mutableListOf<Clan>()
+        for (element in clans) {
+            if (predicate(element)) result.add(element)
+        }
+        return result
+    }
+
     fun reload(clan: Clan) {
         get { it.name == clan.name }?.let {
             remove(it)
@@ -38,17 +46,16 @@ object ClanCache {
 }
 
 object ClanService {
-    object Clans : Table() {
-        val id = integer("id").autoIncrement()
-        val name = varchar("name", length = 50).uniqueIndex()
-        val displayName = varchar("display_name", length = 50)
-        val owner = varchar("display_name", length = 50)
+    object Clans : Table("clan_clans") {
+        val id: Column<Int> = integer("id").autoIncrement()
+        val name: Column<String> = varchar("name", length = 50).uniqueIndex()
+        val displayName: Column<String> = varchar("display_name", length = 50)
+        val owner: Column<String> = varchar("owner", length = 50)
 
-        override val tableName = "clan_clans"
         override val primaryKey = PrimaryKey(id)
     }
 
-    init {
+    fun enable() {
         transaction(Databases.database) {
             SchemaUtils.create(Clans)
         }

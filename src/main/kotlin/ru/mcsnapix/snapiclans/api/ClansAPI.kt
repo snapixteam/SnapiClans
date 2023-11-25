@@ -1,3 +1,11 @@
 package ru.mcsnapix.snapiclans.api
 
-object ClansAPI
+import ru.mcsnapix.snapiclans.database.UserCache
+
+object ClansAPI {
+    @JvmStatic
+    fun getUserClan(name: String): Clan? {
+        val user = UserCache.get { it.name == name } ?: return null
+        return user.clan()
+    }
+}

@@ -3,6 +3,7 @@ package ru.mcsnapix.snapiclans.api.events
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import ru.mcsnapix.snapiclans.api.Clan
+import ru.mcsnapix.snapiclans.managers.InviteStatus
 
 /**
  * @author Flaimer

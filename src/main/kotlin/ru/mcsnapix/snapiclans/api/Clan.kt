@@ -1,6 +1,7 @@
 package ru.mcsnapix.snapiclans.api
 
 import ru.mcsnapix.snapiclans.database.ExposedClan
+import ru.mcsnapix.snapiclans.database.UserCache
 
 
 data class Clan(val id: Int, val name: String, val displayName: String, val owner: String) {
@@ -10,4 +11,8 @@ data class Clan(val id: Int, val name: String, val displayName: String, val owne
         exposedClan.displayName,
         exposedClan.owner
     )
+
+    fun members(): List<User> {
+        return UserCache.getAll { it.clanId == id }
+    }
 }

@@ -1,33 +1,31 @@
 package ru.mcsnapix.snapiclans.database
 
-import co.aikar.idb.DB
-import co.aikar.idb.DatabaseOptions
-import co.aikar.idb.PooledDatabaseOptions
 import org.intellij.lang.annotations.Language
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.transactions.transaction
 import ru.mcsnapix.snapiclans.settings.Settings
+import java.sql.ResultSet
 
 object Databases {
+    private val config = Settings.database
     lateinit var database: Database
-    val clansService: ClanService = ClanService
 
     fun enable() {
-        val config = Settings.database
         database = Database.connect(
-            url = "jdbc:mysql://${config.host()}/${config.database()}",
+            url = "jdbc:mariadb://${config.host()}/${config.database()}",
+            driver = "org.mariadb.jdbc.Driver",
             user = config.username(),
-            driver = "com.mysql.cj.jdbc.Driver",
             password = config.password()
         )
+        ClanService.enable()
+        UserService.enable()
+        executeUpdate(CREATE_TABLE_INVITE)
+        executeUpdate(CREATE_TABLE_MESSENGER)
+    }
 
-        // TODO: Перейти полностью на exposed
-        val db = PooledDatabaseOptions.builder().options(
-            DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
-                .build()
-        ).createHikariDatabase()
-        DB.setGlobalDatabase(db)
-        db.executeUpdate(CREATE_TABLE_INVITE)
-        db.executeUpdate(CREATE_TABLE_MESSENGER)
+    fun disable() {
     }
 
     @Language("SQL")
@@ -55,36 +53,35 @@ object Databases {
             PRIMARY KEY(`id`) USING BTREE
         )
     """.trimIndent()
-//    fun enable() {
-//        val config = Settings.database
-//        val databaseOptions =
-//            DatabaseOptions.builder().mysql(config.username(), config.password(), config.database(), config.host())
-//                .build()
-//        val db = PooledDatabaseOptions.builder().options(databaseOptions).createHikariDatabase()
-//        DB.setGlobalDatabase(db)
-//        initialize()
+}
+
+//fun <T:Any> String.execAndMap(transform : (ResultSet) -> T) : List<T> {
+//    val string = this
+//    val result = arrayListOf<T>()
+//    transaction(Databases.database) {
+//        exec(string) { rs ->
+//            while (rs.next()) {
+//                result += transform(rs)
+//            }
+//        }
 //    }
-//
-//    fun disable() {
-//        DB.close()
-//    }
-//
-//    private fun initialize() {
-//        DB.executeUpdate(CREATE_TABLE_MEMBERS)
-//        DB.executeUpdate(CREATE_TABLE_INVITE)
-//        DB.executeUpdate(CREATE_TABLE_MESSENGER)
-//    }
-//
-//    @Language("SQL")
-//    private val CREATE_TABLE_MEMBERS = """
-//        CREATE TABLE IF NOT EXISTS `clan_members`
-//        (
-//            `clan_id` INTEGER NOT NULL,
-//            `username` VARCHAR(32) NOT NULL,
-//            `role` VARCHAR(32) NOT NULL,
-//            UNIQUE(`clan_id`, `username`),
-//            FOREIGN KEY (`clan_id`) REFERENCES `clan_clans` (`id`) ON DELETE CASCADE,
-//            PRIMARY KEY(`username`)
-//        )
-//    """.trimIndent()
+//    return result
+//}
+
+fun executeUpdate(query: String) {
+    transaction(Databases.database) {
+        exec(query)
+    }
+}
+
+fun <T:Any> executeQuery(query: String, transform : (ResultSet) -> T): List<T> {
+    val result = arrayListOf<T>()
+    transaction(Databases.database) {
+        exec(query) { rs ->
+            while (rs.next()) {
+                result += transform(rs)
+            }
+        }
+    }
+    return result
 }

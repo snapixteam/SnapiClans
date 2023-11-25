@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import ru.mcsnapix.snapiclans.api.events.RemoveClanEvent
 import ru.mcsnapix.snapiclans.callEvent
 import ru.mcsnapix.snapiclans.database.ClanCache
-import ru.mcsnapix.snapiclans.database.ClanService
 import ru.mcsnapix.snapiclans.messenger.Action
 import ru.mcsnapix.snapiclans.messenger.ActionType
 import ru.mcsnapix.snapiclans.messenger.Messenger
@@ -22,8 +21,7 @@ class RemoveClanAction(id: UUID, val name: String) : Action(id, ActionType.REMOV
     override fun executeIncomingMessage() {
         runBlocking {
             val result = async {
-                ClanService.read(name)?.let {
-                    ClanService.delete(it.name)
+                ClanCache.get { it.name == name }?.let {
                     ClanCache.remove(it)
                     callEvent(RemoveClanEvent(it))
                 }

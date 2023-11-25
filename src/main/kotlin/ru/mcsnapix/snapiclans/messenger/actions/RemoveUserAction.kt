@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import ru.mcsnapix.snapiclans.api.events.RemoveUserEvent
 import ru.mcsnapix.snapiclans.callEvent
 import ru.mcsnapix.snapiclans.database.UserCache
-import ru.mcsnapix.snapiclans.database.UserService
 import ru.mcsnapix.snapiclans.messenger.Action
 import ru.mcsnapix.snapiclans.messenger.ActionType
 import ru.mcsnapix.snapiclans.messenger.Messenger.encodeMessage
@@ -22,8 +21,7 @@ class RemoveUserAction(id: UUID, val name: String) : Action(id, ActionType.REMOV
     override fun executeIncomingMessage() {
         runBlocking {
             val result = async {
-                UserService.read(name)?.let {
-                    UserService.delete(it.name)
+                UserCache.get { it.name == name }?.let {
                     UserCache.remove(it)
                     callEvent(RemoveUserEvent(it))
                 }

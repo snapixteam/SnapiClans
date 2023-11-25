@@ -3,6 +3,7 @@ package ru.mcsnapix.snapiclans
 import com.alessiodp.lastloginapi.api.LastLogin
 import com.alessiodp.lastloginapi.api.interfaces.LastLoginAPI
 import com.alessiodp.lastloginapi.api.interfaces.LastLoginPlayer
+import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.model.user.User
@@ -10,6 +11,7 @@ import net.md_5.bungee.api.ChatColor
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
 import ru.mcsnapix.snapiclans.database.UserCache
+import ru.mcsnapix.snapiclans.database.UserService
 
 
 val mm = MiniMessage.miniMessage()
@@ -46,6 +48,14 @@ fun Player.toUser(): ru.mcsnapix.snapiclans.api.User? {
 
 fun Player.hasClan(): Boolean {
     return UserCache.get { it.name == name } != null
+}
+
+fun Player.getUserFromDatabase(): ru.mcsnapix.snapiclans.api.User? {
+    var user: ru.mcsnapix.snapiclans.api.User?
+    runBlocking {
+        user = UserService.read(name)
+    }
+    return user
 }
 
 val economy: Economy

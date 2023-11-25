@@ -13,10 +13,8 @@ import kotlin.math.max
 
 object Messenger {
     private val scheduler = Bukkit.getScheduler()
-    private val lock: ReadWriteLock = ReentrantReadWriteLock()
     private val gson: Gson = GsonBuilder().disableHtmlEscaping().create()
     private var lastId: Int = -1
-    private var closed = false
     private var pollTask: BukkitTask? = null
     private var housekeepingTask: BukkitTask? = null
 
@@ -26,7 +24,7 @@ object Messenger {
         }
         pollTask = scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { pollMessages() }, 0L, 20L)
         housekeepingTask =
-            scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { runHousekeeping() }, 0L, 20L * 6L)
+            scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { runHousekeeping() }, 0L, 20L * 30L)
     }
 
     fun disable() {
@@ -34,27 +32,12 @@ object Messenger {
     }
 
     fun sendOutgoingMessage(action: Action) {
-        lock.readLock().lock()
-        if (closed) {
-            lock.readLock().unlock()
-            return
-        }
         executeUpdate("INSERT INTO `clan_messenger` (`time`, `msg`) VALUES(NOW(), '${action.encode()}')")
-        lock.readLock().unlock()
     }
 
     private fun pollMessages() {
-        println("Messenger execute")
-        lock.readLock().lock()
-        if (closed) {
-            println("Why Execute this???")
-            lock.readLock().unlock()
-            return
-        }
-
         executeQuery("SELECT `id`, `msg` FROM `clan_messenger` WHERE `id` > '$lastId' AND (NOW() - `time` < 30)") {
             lastId = max(lastId, it.getInt("id"))
-            println(lastId)
             val message: String = it.getString("msg")
 
             val parsed: JsonObject = gson.fromJson(message, JsonObject::class.java)
@@ -72,20 +55,11 @@ object Messenger {
 
             val action = type.decode(content, id)
             action.executeIncomingMessage()
-
-            lock.readLock().unlock()
         }
     }
 
     private fun runHousekeeping() {
-        lock.readLock().lock()
-        if (closed) {
-            lock.readLock().unlock()
-            return
-        }
-
         executeUpdate("DELETE FROM `clan_messenger` WHERE (NOW() - `time` > 60)")
-        lock.readLock().unlock()
     }
 
     private fun close() {
@@ -93,8 +67,6 @@ object Messenger {
         housekeepingTask?.cancel()
         pollTask = null
         housekeepingTask = null
-
-        closed = true
     }
 
 

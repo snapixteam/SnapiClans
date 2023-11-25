@@ -44,7 +44,7 @@ class ClanCommand : BaseCommand() {
     fun createClan(player: Player, args: Array<String>) {
         val config = message.commands().createClan()
 
-        if (player.hasClan()) {
+        if (player.getUserFromDatabase() != null) {
             player.send(config.alreadyInClan())
             return
         }
@@ -66,7 +66,7 @@ class ClanCommand : BaseCommand() {
             return
         }
 
-        if (ClanCache.get { it.name == clanName } != null) {
+        if (runBlocking { ClanService.read(clanName) } != null) {
             player.send(config.clanAlreadyCreate())
             return
         }
@@ -94,9 +94,15 @@ class ClanCommand : BaseCommand() {
     fun removeClan(player: Player, args: Array<String>) {
         val config = message.commands().removeClan()
 
-        val user = player.toUser()
-        val clan = ClanCache.get { it.id == user?.clanId }
-        if (user == null || clan == null) {
+        val user = player.getUserFromDatabase()
+        if (user == null) {
+            player.send(config.noClan())
+            return
+        }
+        val clan = runBlocking {
+            ClanService.read(user.clanId)
+        }
+        if (clan == null) {
             player.send(config.noClan())
             return
         }

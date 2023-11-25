@@ -2,8 +2,6 @@ package ru.mcsnapix.snapiclans.database
 
 import org.intellij.lang.annotations.Language
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.sql.ResultSet
@@ -74,7 +72,7 @@ fun executeUpdate(query: String) {
     }
 }
 
-fun <T:Any> executeQuery(query: String, transform : (ResultSet) -> T): List<T> {
+fun <T : Any> executeQuery(query: String, transform: (ResultSet) -> T): List<T> {
     val result = arrayListOf<T>()
     transaction(Databases.database) {
         exec(query) { rs ->

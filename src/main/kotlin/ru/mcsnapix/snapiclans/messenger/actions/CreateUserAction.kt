@@ -23,6 +23,7 @@ class CreateUserAction(id: UUID, val name: String) : Action(id, ActionType.CREAT
             val result = async {
                 UserCache.get { it.name == name }?.let {
                     UserCache.add(it)
+                    println("execute CreateUser")
                     callEvent(CreateUserEvent(it))
                 }
             }

@@ -3,6 +3,10 @@ package ru.mcsnapix.snapiclans.api.roles
 import ru.mcsnapix.snapiclans.settings.Settings
 
 data class ClanRole(val name: String, val displayName: String, val weight: Int, val permissions: Set<ClanPermission>) {
+    fun hasPermission(permission: ClanPermission): Boolean {
+        return permissions.contains(permission)
+    }
+
     companion object {
         fun owner() = Settings.config.roles().ownerRole()
         fun default() = Settings.config.roles().defaultRole()

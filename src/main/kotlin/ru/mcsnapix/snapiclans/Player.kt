@@ -9,6 +9,7 @@ import net.luckperms.api.model.user.User
 import net.md_5.bungee.api.ChatColor
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
+import ru.mcsnapix.snapiclans.database.UserCache
 
 
 val mm = MiniMessage.miniMessage()
@@ -39,6 +40,14 @@ fun <V> Player.send(message: String, vararg placeholder: Placeholder<V>) {
     send(message, placeholder.toList())
 }
 
+fun Player.toUser(): ru.mcsnapix.snapiclans.api.User? {
+    return UserCache.get { it.name == name }
+}
+
+fun Player.hasClan(): Boolean {
+    return UserCache.get { it.name == name } != null
+}
+
 val economy: Economy
     get() = SnapiClans.instance.economy
 
@@ -60,5 +69,7 @@ fun LastLoginPlayer.isOffline(): Boolean {
     val user = getLuckPermsUser(name) ?: return true
     return !user.isOnline()
 }
+
+fun onlinePlayers() = luckPerms.userManager.loadedUsers
 
 fun User.isOnline() = luckPerms.userManager.loadedUsers.contains(this)

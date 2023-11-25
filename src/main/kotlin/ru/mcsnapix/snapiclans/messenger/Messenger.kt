@@ -26,7 +26,7 @@ object Messenger {
         }
         pollTask = scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { pollMessages() }, 0L, 20L)
         housekeepingTask =
-            scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { runHousekeeping() }, 0L, 20L * 30L)
+            scheduler.runTaskTimerAsynchronously(SnapiClans.instance, { runHousekeeping() }, 0L, 20L * 6L)
     }
 
     fun disable() {
@@ -39,20 +39,22 @@ object Messenger {
             lock.readLock().unlock()
             return
         }
-
         executeUpdate("INSERT INTO `clan_messenger` (`time`, `msg`) VALUES(NOW(), '${action.encode()}')")
         lock.readLock().unlock()
     }
 
     private fun pollMessages() {
+        println("Messenger execute")
         lock.readLock().lock()
         if (closed) {
+            println("Why Execute this???")
             lock.readLock().unlock()
             return
         }
 
         executeQuery("SELECT `id`, `msg` FROM `clan_messenger` WHERE `id` > '$lastId' AND (NOW() - `time` < 30)") {
             lastId = max(lastId, it.getInt("id"))
+            println(lastId)
             val message: String = it.getString("msg")
 
             val parsed: JsonObject = gson.fromJson(message, JsonObject::class.java)

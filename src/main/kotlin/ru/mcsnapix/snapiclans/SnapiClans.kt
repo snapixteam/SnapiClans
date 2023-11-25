@@ -6,6 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.plugin.java.JavaPlugin
 import ru.mcsnapix.snapiclans.database.Databases
+import ru.mcsnapix.snapiclans.listeners.Commands
 import ru.mcsnapix.snapiclans.managers.Manager
 import ru.mcsnapix.snapiclans.messenger.Messenger
 import ru.mcsnapix.snapiclans.settings.Settings
@@ -27,7 +28,7 @@ class SnapiClans : JavaPlugin() {
     }
 
     override fun onDisable() {
-
+        disable()
     }
 
     fun enable() {
@@ -41,6 +42,7 @@ class SnapiClans : JavaPlugin() {
         Settings.enable()
         Databases.enable()
         Manager.enable()
+        Commands.enable()
         Messenger.enable()
     }
 

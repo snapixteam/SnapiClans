@@ -1,6 +1,7 @@
 package ru.mcsnapix.snapiclans.database
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -58,10 +59,15 @@ object ClanService {
     fun enable() {
         transaction(Databases.database) {
             SchemaUtils.create(Clans)
+            runBlocking {
+                readAll().forEach {
+                    ClanCache.add(it)
+                }
+            }
         }
     }
 
-    suspend fun create(exposedClan: ExposedClan): Int {
+    suspend fun create(exposedClan: ExposedClan): Clan {
         val id = dbQuery {
             Clans.insert {
                 it[name] = exposedClan.name
@@ -73,7 +79,7 @@ object ClanService {
         val clan = Clan(id, exposedClan)
         Messenger.sendOutgoingMessage(CreateClanAction(UUID.randomUUID(), clan.name))
 
-        return id
+        return clan
     }
 
     suspend fun readAll(): List<Clan> {

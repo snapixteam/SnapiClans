@@ -15,7 +15,6 @@ import ru.mcsnapix.snapiclans.messenger.actions.ResponseInviteAction
 import ru.mcsnapix.snapiclans.send
 import ru.mcsnapix.snapiclans.settings.Settings
 import java.sql.ResultSet
-import java.sql.Timestamp
 import java.util.*
 
 object InviteManager {

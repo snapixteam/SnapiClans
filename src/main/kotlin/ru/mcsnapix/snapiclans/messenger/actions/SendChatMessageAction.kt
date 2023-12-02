@@ -27,8 +27,6 @@ class SendChatMessageAction(id: UUID, val sender: String, val clan: String, val 
                     UserCache.get { it.name == sender }?.let { user ->
                         callEvent(SendChatMessageEvent(it, user, message))
                     }
-
-
                 }
             }
             result.await()

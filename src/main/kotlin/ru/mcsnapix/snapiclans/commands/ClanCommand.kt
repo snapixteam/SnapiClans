@@ -1,4 +1,4 @@
-package ru.mcsnapix.snapiclans.listeners
+package ru.mcsnapix.snapiclans.commands
 
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.*

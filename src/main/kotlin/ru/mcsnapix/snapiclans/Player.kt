@@ -51,11 +51,7 @@ fun Player.hasClan(): Boolean {
 }
 
 fun Player.getUserFromDatabase(): ru.mcsnapix.snapiclans.api.User? {
-    var user: ru.mcsnapix.snapiclans.api.User?
-    runBlocking {
-        user = UserService.read(name)
-    }
-    return user
+    return runBlocking { UserService.read(name) }
 }
 
 val economy: Economy
@@ -80,6 +76,6 @@ fun LastLoginPlayer.isOffline(): Boolean {
     return !user.isOnline()
 }
 
-fun onlinePlayers() = luckPerms.userManager.loadedUsers
+fun onlinePlayers(): Set<User> = luckPerms.userManager.loadedUsers
 
 fun User.isOnline() = luckPerms.userManager.loadedUsers.contains(this)

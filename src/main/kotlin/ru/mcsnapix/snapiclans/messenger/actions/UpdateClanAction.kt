@@ -6,6 +6,7 @@ import com.google.gson.JsonPrimitive
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import ru.mcsnapix.snapiclans.database.ClanCache
+import ru.mcsnapix.snapiclans.database.ClanService
 import ru.mcsnapix.snapiclans.messenger.Action
 import ru.mcsnapix.snapiclans.messenger.ActionType
 import ru.mcsnapix.snapiclans.messenger.Messenger
@@ -19,7 +20,7 @@ class UpdateClanAction(id: UUID, val name: String) : Action(id, ActionType.UPDAT
     override fun executeIncomingMessage() {
         runBlocking {
             val result = async {
-                ClanCache.get { it.name == name }?.let {
+                ClanService.read(name)?.let {
                     ClanCache.reload(it)
                 }
             }
